@@ -1,0 +1,8 @@
+{
+  "global" : false,
+  "icon" : "fontawesome-5.14.0:Grip%20Vertical:SOLID",
+  "host_template_types" : [ "BLOG_LISTING" ],
+  "module_id" : 90358386608,
+  "label" : "Blog Listing",
+  "is_available_for_new_content" : true
+}

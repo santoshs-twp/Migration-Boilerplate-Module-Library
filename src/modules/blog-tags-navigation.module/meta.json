@@ -1,0 +1,7 @@
+{
+  "global" : false,
+  "host_template_types" : [ "PAGE" ],
+  "module_id" : 90785140037,
+  "label" : "Blog tags navigation",
+  "is_available_for_new_content" : true
+}

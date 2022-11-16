@@ -1,0 +1,251 @@
+{% if module.select_blog %}
+<div class="blog_tags_nav_module {{name}} {{ module.advanced_customization.css_class_selector }} {{name}}"{% if module.advanced_customization.css_id_selector %} id="{{ module.advanced_customization.css_id_selector }}"{% endif %}>
+  <div class="tag_wrapper {{ module.display_type }} {{ module.mobile_display_options }}">
+    {% set my_tags = blog_tags( module.select_blog , module.number_of_tags ) %}
+
+    {% if module.display_type == "vert_nav" or module.display_type == "hori_nav" %}
+    {% if module.mobile_display_options == "hamburger" %}
+    <div class="hamburger-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    {% endif %}
+    <ul class="blog-nav">
+      {% if module.enable_all_link %}
+      <li {% if content.absolute_url == group.absolute_url %}class="active"{% endif %}><a href="{{ blog_all_posts_url(module.select_blog)|replace('/all', '') }}">{{ module.all_link_text }}</a>{% if module.display_type == "hori_nav" or module.mobile_display_options == "mob_horizontal" %}{% if module.style.divider_options.divider_type == "," %}{{ module.style.divider_options.divider_type }}{% endif %}{% endif %}</li>
+      {% endif %}
+      {% for item in my_tags %}
+      <li {% if content.absolute_url == blog_tag_url(module.select_blog, item.slug) %}class="active"{% endif %}><a href="{{ blog_tag_url( module.select_blog, item.slug) }}">{{ item }}</a>{% if module.display_type == "hori_nav" or module.mobile_display_options == "mob_horizontal" %}{% if not loop.last %}{% if module.style.divider_options.divider_type == "," %}{{ module.style.divider_options.divider_type }}{% endif %}{% endif %}{% endif %}</li>
+      {% endfor %}
+    </ul>
+
+    {% elif module.display_type == "custom_dropddown" %}
+    <div class="cstm-dropwn">
+      <div class="cutom">
+        <a href="javascript:;">{{ module.custom_dropdown_text }}</a>
+      </div>
+      <ul>
+        {% if module.enable_all_link %}
+        <li {% if content.absolute_url == group.absolute_url %}class="active"{% endif %}><a href="{{ blog_all_posts_url(module.select_blog)|replace('/all', '') }}">{{ module.all_link_text }}</a></li>
+        {% endif %}
+        {% for item in my_tags %}
+        <li {% if content.absolute_url == blog_tag_url(module.select_blog, item.slug) %}class="active"{% endif %}><a href="{{ blog_tag_url( module.select_blog, item.slug) }}">{{ item }}</a></li>
+        {% endfor %}
+      </ul> 
+    </div>
+    
+    {% if module.mobile_display_options == "hamburger" %}
+    <div class="mob-normal-drpdwn">    
+      <div class="hamburger-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>    
+      <ul class="blog-nav">
+        {% if module.enable_all_link %}
+        <li {% if content.absolute_url == group.absolute_url %}class="active"{% endif %}><a href="{{ blog_all_posts_url(module.select_blog)|replace('/all', '') }}">{{ module.all_link_text }}</a></li>
+        {% endif %}
+        {% for item in my_tags %}
+        <li {% if content.absolute_url == blog_tag_url(module.select_blog, item.slug) %}class="active"{% endif %}><a href="{{ blog_tag_url( module.select_blog, item.slug) }}">{{ item }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+
+    {% elif module.display_type == "tiny_nav" %}
+    <div class="desk-tinynav">
+      <form>
+        <select class="my-select"> 
+          {% if module.enable_all_link %}
+          <option value="{{ blog_all_posts_url(module.select_blog)|replace('/all', '') }}">{{ module.all_link_text }}</option> 
+          {% else %}
+          <option disabled selected>Select Tag</option>
+          {% endif %}
+          {% for item in my_tags %}
+          <option value="{{ blog_tag_url( module.select_blog, item.slug) }}" {% if  content.absolute_url|regex_replace("https?://", "") == blog_tag_url(group.id, item.slug)|regex_replace("https?://", "") %}selected="selected"{% endif %}>{{ item }}</option> 
+          {% endfor %}
+        </select> 
+      </form>
+    </div>       
+    {% endif %}
+
+    {% if module.mobile_display_options == "mob_tinynav" %}
+    <div class="mobile-tinynav">
+      <form>
+        <select class="my-mob-select"> 
+          {% if module.enable_all_link %}
+          <option value="{{ blog_all_posts_url(module.select_blog)|replace('/all', '') }}">{{ module.all_link_text }}</option> 
+          {% else %}
+          <option disabled selected>Select Tag</option>
+          {% endif %}
+          {% for item in my_tags %}
+          <option value="{{ blog_tag_url( module.select_blog, item.slug) }}" {% if  content.absolute_url|regex_replace("https?://", "") == blog_tag_url(group.id, item.slug)|regex_replace("https?://", "") %}selected="selected"{% endif %}>{{ item }}</option> 
+          {% endfor %}
+        </select>  
+      </form>
+    </div>
+    {% endif %}
+
+    {% if module.display_type == "tiny_nav" %}
+    <div class="mob-normal-drpdwn">
+      {% if module.mobile_display_options == "hamburger" %}
+      <div class="hamburger-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      {% endif %}
+      <ul class="blog-nav">
+        {% if module.enable_all_link %}
+        <li {% if content.absolute_url == group.absolute_url %}class="active"{% endif %}><a href="{{ blog_all_posts_url(module.select_blog)|replace('/all', '') }}">{{ module.all_link_text }}</a></li>
+        {% endif %}
+        {% for item in my_tags %}
+        <li {% if content.absolute_url == blog_tag_url(module.select_blog, item.slug) %}class="active"{% endif %}><a href="{{ blog_tag_url( module.select_blog, item.slug) }}">{{ item }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+
+
+  </div>
+</div>
+
+{% require_css %}
+<style>
+  {% if module.style.divider_options.divider_type == "-" %}
+  .blog_tags_nav_module.{{name}} .tag_wrapper .blog-nav li::after {
+    content: '-';
+    padding-left: 10px;
+  }
+  .blog_tags_nav_module.{{name}} .tag_wrapper .blog-nav li:last-child::after{
+    display: none;    
+  }
+
+  {% elif module.style.divider_options.divider_type == "/" %}
+  .blog_tags_nav_module.{{name}} .tag_wrapper .blog-nav li::after {
+    content: '/';
+    padding-left: 10px;
+  }
+  .blog_tags_nav_module.{{name}} .tag_wrapper .blog-nav li:last-child::after{
+    display: none;    
+  }
+
+  {% elif module.style.divider_options.divider_type == "|" %}
+  .blog_tags_nav_module.{{name}} .tag_wrapper .blog-nav li::after {
+    content: '|';
+    padding-left: 10px;
+  }
+  .blog_tags_nav_module.{{name}} .tag_wrapper .blog-nav li:last-child::after{
+    display: none;    
+  }
+  {% endif %}
+
+
+ 
+  
+  {% if module.style.mobile_divider_options.divider_type == "-" %}
+  .blog_tags_nav_module.{{name}} .custom_dropddown.mob_horizontal ul li:after,
+  .blog_tags_nav_module.{{name}} .tiny_nav.mob_horizontal ul.blog-nav li:after{
+    content: '-';
+    padding-left: 5px;
+  }
+  .blog_tags_nav_module.{{name}} .custom_dropddown.mob_horizontal ul li:last-child:after,
+  .blog_tags_nav_module.{{name}} .tiny_nav.mob_horizontal ul.blog-nav li:last-child:after{
+    display: none;    
+  }
+  
+  {% elif module.style.mobile_divider_options.divider_type == "," %}
+  .blog_tags_nav_module.{{name}} .custom_dropddown.mob_horizontal ul li:after,
+  .blog_tags_nav_module.{{name}} .tiny_nav.mob_horizontal ul.blog-nav li:after{
+    content: ',';
+    padding-left: 0;
+  }
+  .blog_tags_nav_module.{{name}} .custom_dropddown.mob_horizontal ul li:last-child:after,
+  .blog_tags_nav_module.{{name}} .tiny_nav.mob_horizontal ul.blog-nav li:last-child:after{
+    display: none;    
+  }
+
+  {% elif module.style.mobile_divider_options.divider_type == "/" %}
+  .blog_tags_nav_module.{{name}} .custom_dropddown.mob_horizontal ul li:after,
+  .blog_tags_nav_module.{{name}} .tiny_nav.mob_horizontal ul.blog-nav li:last-child:after{
+    content: '/';
+    padding-left: 5px;
+  }
+  .blog_tags_nav_module.{{name}} .custom_dropddown.mob_horizontal ul li:last-child:after,
+  .blog_tags_nav_module.{{name}} .tiny_nav.mob_horizontal ul.blog-nav li:last-child:after{
+    display: none;    
+  }
+  
+   {% elif module.style.mobile_divider_options.divider_type == "|" %}
+  .blog_tags_nav_module.{{name}} .custom_dropddown.mob_horizontal ul li:after,
+  .blog_tags_nav_module.{{name}} .tiny_nav.mob_horizontal ul.blog-nav li:last-child:after{
+    content: '|';
+    padding-left: 5px;
+  }
+  .blog_tags_nav_module.{{name}} .custom_dropddown.mob_horizontal ul li:last-child:after,
+  .blog_tags_nav_module.{{name}} .tiny_nav.mob_horizontal ul.blog-nav li:last-child:after{
+    display: none;    
+  }
+  
+  {% endif %}
+
+
+</style>
+{% end_require_css %}
+
+
+
+
+{% require_js %}
+<script>
+
+  var parentWrapper = document.querySelector('.blog_tags_nav_module.{{name}}');
+if(parentWrapper){
+
+    //======= tiny nav
+    {% if module.display_type == "tiny_nav" %}
+    document.querySelector('.{{name}} .my-select').addEventListener('change', function() {
+                           window.location.assign(this.value);
+  });
+  {% endif %}
+  {% if module.mobile_display_options == "mob_tinynav" %}
+  document.querySelector('.{{name}} .my-mob-select').addEventListener('change', function() {
+                         window.location.assign(this.value);
+  });
+  {% endif %}
+
+  {% if module.display_type == "custom_dropddown" %}
+  //======= custom drop down 
+  var customDropWrap = document.querySelector('.blog_tags_nav_module.{{name}} .cutom');
+                                              if(customDropWrap){
+    var element = document.querySelector('.blog_tags_nav_module .cutom a');
+    element.addEventListener("click", myFunction);
+
+    function myFunction(e) {
+      var current = this;
+      current.parentElement.classList.toggle("active");
+      e.stopPropagation();
+    }
+
+    var cmDropdown = document.querySelector(".cstm-dropwn ul");
+    cmDropdown.addEventListener("click", function(e) {
+      e.stopPropagation();
+    });
+
+    var clickBtn = document.querySelector("body");
+    var removeEle = document.querySelector(".cutom");
+
+    clickBtn.addEventListener("click", function(e) {
+      removeEle.classList.remove("active");
+    });
+  }
+  {% endif %}
+
+  }
+
+
+</script>
+{% end_require_js%}
+
+{% endif %}

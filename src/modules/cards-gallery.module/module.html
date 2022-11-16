@@ -1,0 +1,507 @@
+<div class="cards_gallery_module {{ module.columns_per_row }} {{name}} {{ module.advanced_customization.css_class_selector }}" id="{{ module.advanced_customization.css_id_selector }}">
+  <div class="content-wrapper">
+    <div class="flex_row_card">
+      {% for item in module.cards %}
+      <div class="item {{ item.hover_effect }} num{{loop.index}} {% if item.image_display_options == "cover_card" %}coverImg{% endif %} ">
+        <div class="card-outer normal" {% if item.image_display_options == "cover_card" %}style="background-image: url({{ item.image_field.src }});"{% endif %}>
+          {% if item.hover_effect == "overlayeffect" %}
+          <div class="overlayadded" style="background-color:rgba({{ item.overlay_color.color|convert_rgb }}, {{ item.overlay_color.opacity/100 }});"></div>
+          {% endif %}
+
+          {% if item.select_icon_type or item.hover_effect %}
+          <div class="icon-wrap {% if item.select_icon_type == "img" %}imagecard{% else %}iconcard{% endif %}">
+            {% if item.select_icon_type == "img" %}
+
+            {% if item.image_field.src %}
+            <div class="normal-img">
+              {% set loadingAttr = item.image_field.loading != 'disabled' ? 'loading="{{ item.image_field.loading }}"' : '' %}
+              <img src="{{ item.image_field.src }}" alt="{{ item.image_field.alt }}" {{ loadingAttr }} />
+            </div>
+            {% endif %}
+
+            {% elif item.select_icon_type == "icon" %}
+            <div class="normal-icon iconadded">
+              {% icon name="{{ item.icon_field.name }}" style="{{ item.icon_field.type }}" unicode="{{ item.icon_field.unicode }}" icon_set="{{ item.icon_field.icon_set }}" %}
+            </div>
+
+            {% endif %}
+
+            {% if item.hover_effect == "imghovereffect" %}
+            <div class="hover-img">
+              {% if item.hover_image.src %}
+              {% set loadingAttr = item.hover_image.loading != 'disabled' ? 'loading="{{ item.hover_image.loading }}"' : '' %}
+              <img src="{{ item.hover_image.src }}" alt="{{ item.hover_image.alt }}" {{ loadingAttr }} />
+              {% endif %}
+            </div>            
+            {% endif %}
+
+            {% if item.hover_effect == "iconeffect" %}
+            <div class="hover-icon iconadded">
+              {% icon
+		name="{{ item.hover_icon.name }}"
+		style="{{ item.hover_icon.type }}"
+		unicode="{{ item.hover_icon.unicode }}"
+		icon_set="{{ item.hover_icon.icon_set }}"
+	%}
+            </div>            
+            {% endif %}
+
+          </div>
+          {% endif %}
+
+          <div class="content-wrap {{ module.display_order.display_order_one }} {{ module.display_order.display_order_two }} {{ module.display_order.display_order_three }} {{ module.display_order.display_order_four }} {{ module.display_order.display_order_five }}">
+
+            {% if item.hover_effect != "flipeffect" %}
+            {% if item.include_counter %}
+            <h3 class="counter" data-target="{{ item.counter }}">{{ item.counter }}</h3>
+            {% endif %}
+            {% else %}
+            {% if item.include_counter %}
+            {% if item.front_card.counter_check %}
+            <h3 class="counter" data-target="{{ item.counter }}">{{ item.counter }}</h3>
+            {% endif %}
+            {% endif %}
+            {% endif %}
+
+            {% if item.hover_effect != "flipeffect" %}
+            {% if item.title %}
+            <h2 class="title">{{ item.title }}</h2>
+            {% endif %}  
+            {% else %}
+            {% if item.front_card.title_check %}
+            <h2 class="title">{{ item.title }}</h2>
+            {% endif %}
+            {% endif %}
+
+            {% if item.hover_effect != "flipeffect" %}
+            {% if item.subtitle %}
+            <h4 class="subtitle">{{ item.subtitle }}</h4>
+            {% endif %}
+            {% else %}
+            {% if item.front_card.subttile_check %}
+            <h4 class="subtitle">{{ item.subtitle }}</h4>
+            {% endif %}        
+            {% endif %}
+
+            {% if item.hover_effect != "flipeffect" %}
+            {% if item.description %}
+            <p class="description">{{ item.description }}</p>
+            {% endif %}
+            {% else %}
+            {% if item.front_card.description_check %}
+            <p class="description">{{ item.description }}</p>
+            {% endif %}
+            {% endif %}
+
+            {% if item.hover_effect != "flipeffect" %}
+            {% if item.include_social_icons %}
+            <div class="social-links">
+              {% for item2 in item.social_links %}
+
+              {% set href = item2.social_link.url.href %}
+              {% if item2.social_link.url.type is equalto "EMAIL_ADDRESS" %}
+              {% set href = "mailto:" + href %}
+              {% endif %}
+
+              {% set rel = [] %}
+              {% if item2.social_link.no_follow %}
+              {% do rel.append("nofollow") %}
+              {% endif %}
+              {% if item2.social_link.open_in_new_tab %}
+              {% do rel.append("noopener") %}
+              {% endif %}
+
+              {% if item2.social_account != 'custom_icon' %}
+              {% set social_icon = item2.social_account %}
+              {% else %}
+              {% set social_icon = item2.custom_icon.name %}
+              {% endif %}
+
+              <a class="social-links__link" href="{{ href }}"
+                 {% if item2.social_link.open_in_new_tab %}target="_blank"{% endif %}
+                 {% if rel %}rel="{{ rel|join(' ') }}"{% endif %}>
+                {% icon
+        extra_classes='social-links__icon',
+        name='{{ social_icon }}',
+        purpose='semantic',
+        style='SOLID',
+        unique_in_loop=True
+      %}
+              </a>
+              {% endfor %}
+            </div>
+            {% endif %}
+            {% else %}
+            {% if item.include_social_icons %}
+            {% if item.front_card.social_check %}
+            <div class="social-links">
+              {% for item2 in item.social_links %}
+
+              {% set href = item2.social_link.url.href %}
+              {% if item2.social_link.url.type is equalto "EMAIL_ADDRESS" %}
+              {% set href = "mailto:" + href %}
+              {% endif %}
+
+              {% set rel = [] %}
+              {% if item2.social_link.no_follow %}
+              {% do rel.append("nofollow") %}
+              {% endif %}
+              {% if item2.social_link.open_in_new_tab %}
+              {% do rel.append("noopener") %}
+              {% endif %}
+
+              {% if item2.social_account != 'custom_icon' %}
+              {% set social_icon = item2.social_account %}
+              {% else %}
+              {% set social_icon = item2.custom_icon.name %}
+              {% endif %}
+
+              <a class="social-links__link" href="{{ href }}"
+                 {% if item2.social_link.open_in_new_tab %}target="_blank"{% endif %}
+                 {% if rel %}rel="{{ rel|join(' ') }}"{% endif %}>
+                {% icon
+        extra_classes='social-links__icon',
+        name='{{ social_icon }}',
+        purpose='semantic',
+        style='SOLID',
+        unique_in_loop=True
+      %}
+              </a>
+              {% endfor %}
+            </div>
+            {% endif %}
+            {% endif %}
+            {% endif %}
+
+            {% if item.hover_effect != "flipeffect" %}
+            {% if item.link_options.select_link_type %}
+            <div class="butn-wrapper">
+              {% if item.link_options.select_link_type == "simple_link" %}
+              {% set href = item.link_options.link_field.url.href %}
+              {% if item.link_options.link_field.url.type is equalto "EMAIL_ADDRESS" %}
+              {% set href = "mailto:" + href %}
+              {% endif %}
+              <a href="{{ href }}" class="simple-link"
+                 {% if item.link_options.link_field.open_in_new_tab %}target="_blank"{% endif %}
+                 {% if item.link_options.link_field.rel %}rel="{{ item.link_options.link_field.rel }}"{% endif %}
+                 >
+                {{ item.link_options.link_text }}
+              </a>
+
+              {% elif item.link_options.select_link_type == "button_link" %}
+
+              {% if item.link_options.select_button_type == "std" %}
+              {% set href = item.link_options.button_link.url.href %}
+              {% if item.link_options.bookmark_id %}
+              {% set href = href + '#'+ item.link_options.bookmark_id %}
+              {% else %}
+              {% set href = item.link_options.button_link.url.href %}
+              {% endif %}
+
+              {% if item.link_options.button_link.url.type is equalto "EMAIL_ADDRESS" %}
+              {% set href = "mailto:" + href %}
+              {% endif %}
+              <a href="{{ href }}" class="hs-button"
+                 {% if item.link_options.button_link.open_in_new_tab %}target="_blank"{% endif %}
+                 {% if item.link_options.button_link.rel %}rel="{{ item.link_options.button_link.rel }}"{% endif %}
+                 >
+                {{ item.link_options.button_text }}
+              </a>
+              {% elif item.link_options.select_button_type =="cta" %}
+              {% cta guid="{{ item.link_options.cta_field }}" %}
+              {% endif %}
+
+              {% endif %}
+
+            </div>
+            {% endif %}
+            {% else %}
+            {% if item.front_card.button_check %}
+            {% if item.link_options.select_link_type %}
+            <div class="butn-wrapper">
+              {% if item.link_options.select_link_type == "simple_link" %}
+              {% set href = item.link_options.link_field.url.href %}
+              {% if item.link_options.link_field.url.type is equalto "EMAIL_ADDRESS" %}
+              {% set href = "mailto:" + href %}
+              {% endif %}
+              <a href="{{ href }}" class="simple-link"
+                 {% if item.link_options.link_field.open_in_new_tab %}target="_blank"{% endif %}
+                 {% if item.link_options.link_field.rel %}rel="{{ item.link_options.link_field.rel }}"{% endif %}
+                 >
+                {{ item.link_options.link_text }}
+              </a>
+
+              {% elif item.link_options.select_link_type == "button_link" %}
+
+              {% if item.link_options.select_button_type == "std" %}
+              {% set href = item.link_options.button_link.url.href %}
+              {% if item.link_options.button_link.url.type is equalto "EMAIL_ADDRESS" %}
+              {% set href = "mailto:" + href %}
+              {% endif %}
+              <a href="{{ href }}" class="hs-button"
+                 {% if item.link_options.button_link.open_in_new_tab %}target="_blank"{% endif %}
+                 {% if item.link_options.button_link.rel %}rel="{{ item.link_options.button_link.rel }}"{% endif %}
+                 >
+                {{ item.link_options.button_text }}
+              </a>
+              {% elif item.link_options.select_button_type =="cta" %}
+              {% cta guid="{{ item.link_options.cta_field }}" %}
+              {% endif %}
+
+              {% endif %}
+
+            </div>
+            {% endif %}
+            {% endif %}
+            {% endif %}
+
+          </div>
+
+          {% if item.link_options.select_link_type == "overlay_link" %}
+          {% set href = item.link_options.link_field.url.href %}
+          {% if item.link_options.link_field.url.type is equalto "EMAIL_ADDRESS" %}
+          {% set href = "mailto:" + href %}
+          {% endif %}
+          <a href="{{ href }}" class="overlay-link"
+             {% if item.link_options.link_field.open_in_new_tab %}target="_blank"{% endif %}
+             {% if item.link_options.link_field.rel %}rel="{{ item.link_options.link_field.rel }}"{% endif %}>
+          </a>
+          {% endif %}
+
+        </div>
+
+        {% if item.hover_effect == "flipeffect" %}
+        <div class="card-outer flipcont">
+          <div class="content-wrap">
+
+            {% if item.include_counter %}
+            {% if item.back_card.counter_check %}
+            <h3 class="counter" data-target="{{ item.counter }}">{{ item.counter }}</h3>
+            {% endif %}
+            {% endif %}
+
+            {% if item.back_card.title_check %}
+            {% if item.title %}
+            <h2 class="title">{{ item.title }}</h2>
+            {% endif %}
+            {% endif %}
+
+            {% if item.back_card.subttile_check %}
+            {% if item.subtitle %}
+            <h4 class="subtitle">{{ item.subtitle }}</h4>
+            {% endif %}
+            {% endif %}
+
+            {% if item.back_card.description_check %}
+            {% if item.description %}
+            <p class="description">{{ item.description }}</p>
+            {% endif %}
+            {% endif %}
+
+            {% if item.back_card.social_check %}
+            {% if item.include_social_icons %}
+            <div class="social-links">
+              {% for item2 in item.social_links %}
+
+              {% set href = item2.social_link.url.href %}
+              {% if item2.social_link.url.type is equalto "EMAIL_ADDRESS" %}
+              {% set href = "mailto:" + href %}
+              {% endif %}
+              {% set rel = [] %}
+              {% if item2.social_link.no_follow %}
+              {% do rel.append("nofollow") %}
+              {% endif %}
+              {% if item2.social_link.open_in_new_tab %}
+              {% do rel.append("noopener") %}
+              {% endif %}
+              {% if item2.social_account != 'custom_icon' %}
+              {% set social_icon = item2.social_account %}
+              {% else %}
+              {% set social_icon = item2.custom_icon.name %}
+              {% endif %}
+              <a class="social-links__link" href="{{ href }}"
+                 {% if item2.social_link.open_in_new_tab %}target="_blank"{% endif %}
+                 {% if rel %}rel="{{ rel|join(' ') }}"{% endif %}>
+                {% icon
+        extra_classes='social-links__icon',
+        name='{{ social_icon }}',
+        purpose='semantic',
+        style='SOLID',
+        unique_in_loop=True
+      %}
+              </a>
+
+              {% endfor %}
+            </div>
+            {% endif %}
+            {% endif %}
+
+            {% if item.back_card.button_check %}
+            {% if item.link_options.select_link_type %}
+            <div class="butn-wrapper">
+              {% if item.link_options.select_link_type == "simple_link" %}
+              {% set href = item.link_options.link_field.url.href %}
+              {% if item.link_options.link_field.url.type is equalto "EMAIL_ADDRESS" %}
+              {% set href = "mailto:" + href %}
+              {% endif %}
+              <a href="{{ href }}" class="simple-link"
+                 {% if item.link_options.link_field.open_in_new_tab %}target="_blank"{% endif %}
+                 {% if item.link_options.link_field.rel %}rel="{{ item.link_options.link_field.rel }}"{% endif %}
+                 >
+                {{ item.link_options.link_text }}
+              </a>
+
+              {% elif item.link_options.select_link_type == "button_link" %}
+
+              {% if item.link_options.select_button_type == "std" %}
+              {% set href = item.link_options.button_link.url.href %}
+              {% if item.link_options.button_link.url.type is equalto "EMAIL_ADDRESS" %}
+              {% set href = "mailto:" + href %}
+              {% endif %}
+              <a href="{{ href }}" class="hs-button"
+                 {% if item.link_options.button_link.open_in_new_tab %}target="_blank"{% endif %}
+                 {% if item.link_options.button_link.rel %}rel="{{ item.link_options.button_link.rel }}"{% endif %}
+                 >
+                {{ item.link_options.button_text }}
+              </a>
+              {% elif item.link_options.select_button_type =="cta" %}
+              {% cta guid="{{ item.link_options.cta_field }}" %}
+              {% endif %}
+
+              {% endif %}
+
+            </div>
+            {% endif %}
+            {% endif %}
+
+          </div>
+
+          {% if item.back_card.button_check %}
+          {% if item.link_options.select_link_type == "overlay_link" %}
+          {% set href = item.link_options.link_field.url.href %}
+          {% if item.link_options.link_field.url.type is equalto "EMAIL_ADDRESS" %}
+          {% set href = "mailto:" + href %}
+          {% endif %}
+          <a href="{{ href }}" class="overlay-link"
+             {% if item.link_options.link_field.open_in_new_tab %}target="_blank"{% endif %}
+             {% if item.link_options.link_field.rel %}rel="{{ item.link_options.link_field.rel }}"{% endif %}>
+          </a>
+          {% endif %}
+          {% endif %}
+
+
+        </div>
+        {% endif %}
+
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+
+{% require_css %}
+<style>
+  {% for item in module.cards %}
+  .cards_gallery_module.{{name}} .item.texteffect.num{{loop.index}}:hover h2.title,
+  .cards_gallery_module.{{name}} .item.texteffect.num{{loop.index}}:hover h4.subtitle,
+  .cards_gallery_module.{{name}} .item.texteffect.num{{loop.index}}:hover p.description,
+  .cards_gallery_module.{{name}} .item.texteffect.num{{loop.index}}:hover .butn-wrapper a.simple-link{
+    color: rgba({{ item.text_color.color|convert_rgb }}, {{ item.text_color.opacity/100 }});
+  }
+
+  .cards_gallery_module.{{name}} .flex_row_card .item.num{{loop.index}}{
+    padding: 0 {{ module.style.gap_between_cards }}px;
+  }
+
+  {% if item.hover_effect == "imghovereffect" %}
+  .cards_gallery_module.{{name}} .item.num{{loop.index}}.coverImg:hover .card-outer{
+    background-image: url({{ item.hover_image.src }}) !important;
+  }
+
+  .cards_gallery_module.{{name}} .item.imghovereffect.coverImg:hover .card-outer:after{
+    content: '';
+    background-color: rgba({{ item.image_overlay_color.color|convert_rgb }}, {{ item.image_overlay_color.opacity/100 }})
+  }
+  {% endif %}
+  {% endfor %}
+
+  .cards_gallery_module.{{name}} .content-wrapper{
+    {{ module.style.padding.spacing_field.css }}
+  }
+
+  {% if module.style.font_options.title.override_default_font_style %}
+  .cards_gallery_module .content-wrap h2.title{
+    font-size: {{ module.style.font_options.title.text_style.font_size }}px;
+    font-weight: {{ module.style.font_options.title.text_style.font_weight }};
+    color: rgba({{ module.style.font_options.title.text_style.color_field.color|convert_rgb }},{{ module.style.font_options.title.text_style.color_field.opacity/100 }});
+    line-height: {{ module.style.font_options.title.text_style.line_height }};
+  }
+  {% endif %}
+
+  {% if module.style.font_options.subtitle.override_default_font_style %}
+  .cards_gallery_module .content-wrap h4.subtitle{
+    font-size: {{ module.style.font_options.subtitle.text_style.font_size }}px;
+    font-weight: {{ module.style.font_options.subtitle.text_style.font_weight }};
+    color: rgba({{ module.style.font_options.subtitle.text_style.color_field.color|convert_rgb }},{{ module.style.font_options.subtitle.text_style.color_field.opacity/100 }});
+    line-height: {{ module.style.font_options.subtitle.text_style.line_height }};
+  }
+  {% endif %}
+
+  {% if module.style.font_options.description.override_default_font_style %}
+  .cards_gallery_module .content-wrap p.description{
+    font-size: {{ module.style.font_options.description.text_style.font_size }}px;
+    font-weight: {{ module.style.font_options.description.text_style.font_weight }};
+    color: rgba({{ module.style.font_options.description.text_style.color_field.color|convert_rgb }},{{ module.style.font_options.description.text_style.color_field.opacity/100 }});
+    line-height: {{ module.style.font_options.description.text_style.line_height }};
+  }
+  {% endif %}
+
+
+  @media (max-width: 767px){
+    {% if module.style.font_options.title.text_style.change_font_style_in_mobile %}
+    .cards_gallery_module .content-wrap h2.title{
+      font-size: {{ module.style.font_options.title.text_style.font_size_mobile }}px;
+      line-height: {{ module.style.font_options.title.text_style.line_height_mobile }};
+    }
+    {% endif %}
+
+    {% if module.style.font_options.subtitle.text_style.change_font_style_in_mobile %}
+    .cards_gallery_module .content-wrap h4.subtitle{
+      font-size:{{ module.style.font_options.subtitle.text_style.font_size_mobile }}px;
+      line-height: {{ module.style.font_options.subtitle.text_style.line_height_mobile }};
+    }
+    {% endif %}
+
+
+    {% if module.style.font_options.description.text_style.change_font_style_in_mobile %}
+    .cards_gallery_module .content-wrap p.description{
+      font-size: {{ module.style.font_options.description.text_style.font_size_mobile }}px;
+      line-height: {{ module.style.font_options.description.text_style.line_height_mobile }};
+    }
+    {% endif %}
+
+    {% if module.style.padding.change_spacing_in_mobile %}
+    .cards_gallery_module.{{name}} .content-wrapper{
+      {{ module.style.padding.spacing_mobile.css }}
+    }
+    {% endif %}
+
+  }
+
+
+
+</style>
+{% end_require_css %}
+
+
+
+
+
+
+
+
+
+
+
+

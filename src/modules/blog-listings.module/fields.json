@@ -1,0 +1,95 @@
+[ {
+  "id" : "number_of_columns",
+  "name" : "number_of_columns",
+  "display_width" : null,
+  "label" : "Number of columns",
+  "required" : false,
+  "locked" : false,
+  "display" : "select",
+  "choices" : [ [ "full-width", "1" ], [ "two-col", "2" ], [ "three-col", "3" ], [ "four-col", "4" ] ],
+  "multiple" : false,
+  "reordering_enabled" : true,
+  "type" : "choice",
+  "default" : ""
+}, {
+  "id" : "featured_image",
+  "name" : "featured_image",
+  "display_width" : null,
+  "label" : "Featured image",
+  "required" : false,
+  "locked" : false,
+  "display" : "checkbox",
+  "type" : "boolean",
+  "default" : true
+}, {
+  "id" : "tags",
+  "name" : "tags",
+  "display_width" : null,
+  "label" : "Tags",
+  "required" : false,
+  "locked" : false,
+  "display" : "checkbox",
+  "type" : "boolean",
+  "default" : true
+}, {
+  "id" : "post_title",
+  "name" : "post_title",
+  "display_width" : null,
+  "label" : "Post title",
+  "required" : false,
+  "locked" : false,
+  "display" : "checkbox",
+  "type" : "boolean",
+  "default" : true
+}, {
+  "id" : "description",
+  "name" : "description",
+  "display_width" : null,
+  "label" : "Description",
+  "required" : false,
+  "locked" : false,
+  "display" : "checkbox",
+  "type" : "boolean",
+  "default" : true
+}, {
+  "id" : "reading_minutes",
+  "name" : "reading_minutes",
+  "display_width" : null,
+  "label" : "Reading minutes",
+  "required" : false,
+  "locked" : false,
+  "display" : "checkbox",
+  "type" : "boolean",
+  "default" : true
+}, {
+  "id" : "read_more",
+  "name" : "read_more",
+  "display_width" : null,
+  "label" : "Read more",
+  "required" : false,
+  "locked" : false,
+  "display" : "checkbox",
+  "type" : "boolean",
+  "default" : true
+}, {
+  "id" : "read_more_text",
+  "name" : "read_more_text",
+  "display_width" : null,
+  "label" : "Read more text",
+  "required" : false,
+  "locked" : false,
+  "validation_regex" : "",
+  "visibility" : {
+    "controlling_field" : "read_more",
+    "controlling_field_path" : null,
+    "controlling_value_regex" : "true",
+    "property" : null,
+    "operator" : "EQUAL",
+    "access" : null,
+    "hidden_subfields" : null
+  },
+  "allow_new_line" : false,
+  "show_emoji_picker" : false,
+  "type" : "text",
+  "default" : "Read More"
+} ]

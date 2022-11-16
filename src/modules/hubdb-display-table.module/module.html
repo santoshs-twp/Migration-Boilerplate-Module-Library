@@ -1,0 +1,404 @@
+{% set tableId = module.select_table %}
+{% set queryParams = '' %}
+
+{% if module.enable_pagination %}
+
+{% set batch_num = module.page_size %}
+{% if not request.query_dict.page_num %}
+{% set page_num = 1 %}
+{% set offset_num = 0 %}
+{% elif request.query_dict.page_num %}
+{% set page_num = request.query_dict.page_num %}
+{% set offset_num = page_num|add(-1) * batch_num %}
+{% endif %}
+{% set queryParams = "orderBy=-hs_created_at&limit=" ~ batch_num ~ "&offset=" ~ offset_num %}
+{% set paginationQuery = "orderBy=-hs_created_at" %}
+
+{% else %}
+
+{% set queryParams = "orderBy=-hs_created_at" %}
+
+{% endif %}
+
+{% set dataRows = hubdb_table_rows(tableId, queryParams) %} 
+{% set columns = hubdb_table(tableId).columns %}
+
+
+<div {% if module.advanced_customization.css_id_selector %}id="{{ module.advanced_customization.css_id_selector }}"{% endif %} class="hbdb_dsp_table_wrapper {{name}} {{ module.advanced_customization.css_class_selector }}">
+  <div class="content-wrapper">
+
+    <div class="hbdb_dsp_row_wrap">
+      <div class="hbdb_dsp_row flex_row">
+
+
+        {% for row in dataRows %}
+
+        <div class="{{ module.select_columns_in_row }} hbdb_card">
+          <div class="hbdb_card_inner">
+
+            {% for column in columns %}
+            {% if column.type == "IMAGE" %}
+            <div class="hbdb_card_img">
+              <img src="{{ row[column.label|replace(' ','_')].url }}" alt="" title="">
+            </div>
+            {% endif %}
+
+            {% if column.type == "TEXT" %}
+            <h2 class="hbdb_card_title">
+              {{ row[column.label|replace(' ','_')] }}
+            </h2>
+            {% endif %}
+
+            {% if column.type == "DATE" %}
+            <div class="hbdb_card_date">
+              {{ row[column.label]|datetimeformat("%B %e, %Y")}}
+            </div>
+            {% endif %}
+
+            {% if column.type == "DATETIME" %}
+            <div class="hbdb_card_date">
+              {{ row[column.label]|datetimeformat("%B %e, %Y %l %p")}}
+            </div>
+            {% endif %}
+
+
+            {% if column.type == "MULTISELECT" %}
+            <div class="hbdb_card_tag">
+              {% for tag in row[column.label|replace(' ','_')] %}
+              <span>{{tag.name}}</span>{% if not loop.last %}, {% endif %}
+              {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if column.type == "SELECT" %}
+            <div class="hbdb_card_tag select">
+              {{ row[column.label].name}}
+            </div>
+            {% endif %}
+
+            {% if column.type == "URL" and row[column.label|replace(' ','_')] %}
+            <a href="{{ row[column.label|replace(' ','_')] }}" class="moreLink">
+              Read More
+            </a>
+            {% endif %}
+
+            {% if column.type == "RICHTEXT" %}
+            <div class="hbdb_card_summary">
+              {{ row[column.label|replace(' ','_') ]|truncate(150, True, "...") }}
+            </div>
+            {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+
+      </div>
+    </div>
+    <!--      -->
+
+    {% if module.enable_pagination %}
+
+    {% set nav = hubdb_table_rows(module.select_table, paginationQuery) %}
+    {% set total_pages = nav|length|divide(batch_num)%}
+    {% set more_pages = nav|length % batch_num %}
+
+    {% if module.select_pagination == "prev_next" %}
+    {% if more_pages == 0 %}
+    {% set total_pages = total_pages %}
+    {% else %}
+    {% set total_pages = total_pages + 1 %}
+    {% endif %}
+    {% endif %}
+
+    <nav class="hbdb_dsp_table_pagination  {% if module.select_pagination == "infinite" %}infinite{% endif %}">
+      <div class="nav-links" data-total="{{total_pages}}" data-page="{{page_num}}" data-more="{{more_pages}}">
+
+
+        {% if module.select_pagination == "infinite" %}
+        {% if total_pages > page_num %}
+        <a class="infinite_scroll hs-button" href="{{ content.absolute_url }}?page_num={{ page_num|add(1) }}">Infinite Scroll</a>
+        {% endif %}
+        {% endif %}
+
+        {% if module.select_pagination == "load_more" %}
+        {% if total_pages > page_num %}
+        <a class="load-more_btn hs-button" href="{{ content.absolute_url }}?page_num={{ page_num|add(1) }}">{{ module.load_more_text }}</a>
+        {% endif %}
+        {% endif %}
+
+        {% if module.select_pagination == "prev_next" || module.select_pagination == "number_pagination" %}
+        {% if page_num > 1 %}
+        <a class="prev page-numbers" href="{{ content.absolute_url }}?page_num={{ page_num|add(-1) }}">
+          {% icon
+              name='chevron-left',
+              no_wrapper=True,
+              purpose='decorative',
+              style='SOLID',
+              width='13'
+            %}
+          {{ module.previous_link_text }}</a>
+        {% endif %}
+        {% endif %}
+
+        {#--#}
+        {% if module.select_pagination == "number_pagination" %}
+
+        {% if more_pages == 0 %}
+        {% if page_num|add(-4) >= 1 %} <a class="page-numbers" href="{{ content.absolute_url }}?page_num={{ page_num|add(-4) }}">{{ page_num|add(-4) }}</a>{% endif %}
+        {% endif %}
+
+        {% if more_pages <= 1 %}
+        {% if page_num|add(-3) >= 1 %}<a class="page-numbers" href="{{ content.absolute_url }}?page_num={{ page_num|add(-3) }}">{{ page_num|add(-3) }}</a>{% endif %}
+        {% endif %}
+
+        {% if page_num|add(-2) >= 1 %} <a class="page-numbers" href="{{ content.absolute_url }}?page_num={{ page_num|add(-2) }}">{{ page_num|add(-2) }}</a>{% endif %}
+
+        {% if page_num|add(-1) >= 1 %}<a class="page-numbers" href="{{ content.absolute_url }}?page_num={{ page_num|add(-1) }}">{{ page_num|add(-1) }}</a>{% endif %}
+
+        <a class="active page-numbers" href="{{ content.absolute_url }}?page_num={{ page_num }}">{{ page_num }}</a>
+
+        {% if page_num|add(1) <= total_pages %}<a class="page-numbers" href="{{ content.absolute_url }}?page_num={{ page_num|add(1) }}">{{ page_num|add(1) }}</a>{% endif %}
+
+        {% if page_num|add(2) <= total_pages %}<a class="page-numbers" href="{{ content.absolute_url }}?page_num={{ page_num|add(2) }}">{{ page_num|add(2) }}</a>{% endif %}
+
+        {% if page_num <= 2 %}
+        {% if page_num|add(3) <= total_pages %}<a class="page-numbers" href="{{ content.absolute_url }}?page_num={{ page_num|add(3) }}">{{ page_num|add(3) }}</a>{% endif %}
+        {% endif %}
+
+        {% if page_num == 1 %}
+        {% if page_num|add(4) <= total_pages %}<a class="page-numbers" href="{{ content.absolute_url }}?page_num={{ page_num|add(4) }}">{{ page_num|add(4) }}</a>{% endif %}
+        {% endif %}
+
+        {% endif %}
+        {#--#}
+
+        {% if module.select_pagination == "prev_next" || module.select_pagination == "number_pagination" %}
+        {% if total_pages > page_num %}
+        <a class="next page-numbers {% if page_num >= total_pages %}hide page_num{% endif %}" href="{{ content.absolute_url }}?page_num={{ page_num|add(1) }}">
+          {{ module.next_link_text }}
+          {% icon
+              name='chevron-right',
+              no_wrapper=True,
+              purpose='decorative',
+              style='SOLID',
+              width='13'
+            %}
+        </a>
+        {% endif %}
+        {% endif %}
+
+
+      </div>
+    </nav>
+    {% endif %}
+  </div>
+</div>
+
+
+{% require_css %}
+<style>
+  {% if module.style.spacing.spacing %}
+  .{{name}}.hbdb_dsp_table_wrapper{
+    {{ module.style.spacing.spacing.css }}
+  }
+  {% endif %}
+  {% if module.style.spacing.change_mobile_spacing %}
+  @media(max-width:767px){
+    .{{name}}.hbdb_dsp_table_wrapper{
+      {{ module.style.spacing.mobile.css }}
+    }
+  }
+  {% endif %}
+  /*    */
+
+  {% if module.style.card_spacing.spacing %}
+  .{{name}}.hbdb_dsp_table_wrapper .hbdb_card{
+    {{ module.style.card_spacing.spacing.css }};
+  }
+  {% endif %}
+
+  {% if module.style.card_spacing.change_mobile_spacing %}
+  @media(max-width:767px){
+    .{{name}}.hbdb_dsp_table_wrapper .hbdb_card{
+      {{ module.style.card_spacing.mobile.css }};
+    }
+  }
+  {% endif %}
+
+  {% if module.style.card_body_spacing.desktop %}
+  .{{name}}.hbdb_dsp_table_wrapper .hbdb_card_inner{
+    {{ module.style.card_body_spacing.desktop.css }}
+  }
+
+  .{{name}}.hbdb_dsp_table_wrapper .hbdb_card_inner .hbdb_card_img {
+    margin-left:-{{module.style.card_body_spacing.desktop.padding.left.value}}{{module.style.card_body_spacing.desktop.padding.left.units}};
+    margin-right:-{{module.style.card_body_spacing.desktop.padding.right.value}}{{module.style.card_body_spacing.desktop.padding.right.units}};
+    margin-top: -{{module.style.card_body_spacing.desktop.padding.top.value}}{{module.style.card_body_spacing.desktop.padding.top.units}};;
+  }
+
+  {% endif %}
+  {% if module.style.card_body_spacing.mobile %}
+  @media(max-width:767px){
+    .{{name}}.hbdb_dsp_table_wrapper .hbdb_card_inner{
+      {{ module.style.card_body_spacing.mobile.css }}
+    }
+
+    .{{name}}.hbdb_dsp_table_wrapper .hbdb_card_inner .hbdb_card_img {
+      margin-left:-{{module.style.card_body_spacing.mobile.padding.left.value}}{{module.style.card_body_spacing.mobile.padding.left.units}};
+      margin-right:-{{module.style.card_body_spacing.mobile.padding.right.value}}{{module.style.card_body_spacing.mobile.padding.right.units}};
+      margin-top: -{{module.style.card_body_spacing.mobile.padding.top.value}}{{module.style.card_body_spacing.mobile.padding.top.units}};;
+    }
+  }
+  {% endif %}
+
+
+
+
+  .{{name}}.hbdb_dsp_table_wrapper .hbdb_card_inner{
+    {% if module.style.border_options.width %} border-width:{{ module.style.border_options.width }}px; {% endif %}
+    border-radius: {{ module.style.border_options.corner_radius }}px;
+    {% if module.style.border_options.width %} border-color:  rgba({{ module.style.border_options.color.color|convert_rgb  }},{{ module.style.border_options.color.opacity/100 }}); {% endif %}
+  }
+
+  /*    */
+  {% if module.style.font_options.override_default_font_style %}
+  .{{name}}.hbdb_dsp_table_wrapper .hbdb_card_inner{
+    line-height: {{ module.style.font_options.line_height }};
+    font-size: {{ module.style.font_options.font_size }}px;
+    font-weight: {{ module.style.font_options.font_weight }};
+    color: rgba({{ module.style.font_options.font_color.color|convert_rgb  }},{{ module.style.font_options.font_color.opacity/100 }});
+  }
+  {% if module.style.font_options.change_mobile_styles %}
+  @media(max-width:767px){
+    .{{name}}.hbdb_dsp_table_wrapper .hbdb_card_inner{
+      line-height: {{ module.style.font_options.mobile.line_height }};
+      font-size: {{ module.style.font_options.mobile.font_size }}px;
+      font-weight: {{ module.style.font_options.mobile.font_weight }};
+      color: rgba({{ module.style.font_options.mobile.font_color.color|convert_rgb  }},{{ module.style.font_options.mobile.font_color.opacity/100 }});
+    }
+  }
+  {% endif %}
+
+  {% endif %}
+
+</style>
+{% end_require_css %}
+
+
+{% require_js %}
+<script>
+
+  var parentWrapper = document.querySelector('.hbdb_dsp_table_wrapper.{{name}}');
+                                             if(parentWrapper){
+
+
+    // append fetched items
+    function loadInfiniteData(url) {
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          var doc = new DOMParser().parseFromString(this.response, "text/html");
+
+          // data items
+          var getElements =  doc.querySelectorAll('.{{name}}.hbdb_dsp_table_wrapper .hbdb_dsp_row > div');
+                                                  var getElementParent = document.querySelector('.hbdb_dsp_table_wrapper.{{name}} .hbdb_dsp_row_wrap .hbdb_dsp_row');
+                                                  for (var i = 0, im = getElements.length; im > i; i++) {
+            getElementParent.appendChild(getElements[i].cloneNode(true));
+          }
+          // pagination
+          var dataElements = doc.querySelector('.hbdb_dsp_table_wrapper.{{name}} .hbdb_dsp_table_pagination .nav-links').cloneNode(true);
+                                               document.querySelector('.hbdb_dsp_table_wrapper.{{name}} .hbdb_dsp_table_pagination').innerHTML = '';
+                                               document.querySelector('.hbdb_dsp_table_wrapper.{{name}} .hbdb_dsp_table_pagination').append(dataElements);
+                                               }
+                                               };
+                                               xhttp.open("GET", url, true);
+          xhttp.send();
+        }
+
+        // replace fetched items
+        function loadPerPageData(url) {
+          var xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+              var doc = new DOMParser().parseFromString(this.response, "text/html");      
+
+              // data items
+              var dataElements = doc.querySelector('.hbdb_dsp_table_wrapper.{{name}} .hbdb_dsp_row').cloneNode(true);
+                                                   document.querySelector('.hbdb_dsp_table_wrapper.{{name}} .hbdb_dsp_row_wrap').innerHTML = '';
+                                                   document.querySelector('.hbdb_dsp_table_wrapper.{{name}} .hbdb_dsp_row_wrap').append(dataElements);
+
+                                                   // pagination
+                                                   var dataElements = doc.querySelector('.hbdb_dsp_table_wrapper.{{name}} .hbdb_dsp_table_pagination .nav-links').cloneNode(true);
+                                                   document.querySelector('.hbdb_dsp_table_wrapper.{{name}} .hbdb_dsp_table_pagination').innerHTML = '';
+                                                   document.querySelector('.hbdb_dsp_table_wrapper.{{name}} .hbdb_dsp_table_pagination').append(dataElements);
+                                                   }
+                                                   };
+                                                   xhttp.open("GET", url, true);
+              xhttp.send();
+            }
+
+            // infinite scroll
+            var infiniteScrollBtnWrap = document.querySelector(".hbdb_dsp_table_wrapper.{{name}} .infinite_scroll");
+                                                               if(infiniteScrollBtnWrap){
+              function checkOnScroll(cb){
+                var hbdb_dsp_table_wrapper3 = document.querySelector(".hbdb_dsp_table_wrapper.{{name}} .infinite_scroll");
+                                                                     if(hbdb_dsp_table_wrapper3){
+                  var getAttr = hbdb_dsp_table_wrapper3.getAttribute('href');
+                  loadInfiniteData(getAttr);
+                  cb();
+                }
+              }
+
+              var infiniteScrollBtn = document.querySelector('.{{name}} .hbdb_dsp_table_pagination.infinite');
+                                                             var isIntersected = false;
+
+                                                             window.addEventListener("scroll",function() {
+                var infiniteScrollBtnOffset = infiniteScrollBtn.getBoundingClientRect().top;
+                var clientHeight = document.documentElement.clientHeight;
+                if ((infiniteScrollBtnOffset - clientHeight) <= 160) {
+                  if (!isIntersected) {
+                    // console.log('if loaded'); 
+                    isIntersected = true;
+                    checkOnScroll(function() {
+                      setTimeout(function(){
+                        isIntersected = false;
+                      }, 2000);
+                    });
+                  }
+                } else {
+                  isIntersected = false;
+                  // console.log('else loaded');
+                }
+              }, {
+                passive: true,
+              });
+              }
+
+              // load more click
+              var loadMoreBtn = document.querySelector('.{{name}} .load-more_btn');
+                                                       if(loadMoreBtn){
+                var hbdb_dsp_table_wrapper2 = document.querySelectorAll(".{{name}}.hbdb_dsp_table_wrapper");
+                                                                        Array.from(hbdb_dsp_table_wrapper2).forEach(function(wrap2) {
+                  wrap2.addEventListener("click", function(e) {
+                    if (e.target.classList.contains("load-more_btn")) {
+                      e.preventDefault();
+                      loadInfiniteData(e.target.getAttribute('href'));
+                    }
+                  });
+                });
+              }
+
+              // pagination links on click
+              var hbdb_dsp_table_wrapper = document.querySelectorAll(".{{name}}.hbdb_dsp_table_wrapper");
+                                                                     Array.from(hbdb_dsp_table_wrapper).forEach(function(wrap) {
+                wrap.addEventListener("click", function(e) {
+                  if (e.target.classList.contains("page-numbers")) {
+                    e.preventDefault();
+                    loadPerPageData(e.target.getAttribute('href'));
+                  }
+                });
+              });
+
+            }
+</script>
+{% end_require_js %}

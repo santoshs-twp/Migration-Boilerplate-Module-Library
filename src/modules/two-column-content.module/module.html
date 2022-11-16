@@ -1,0 +1,178 @@
+<div class="two-col-cont-cm {{name}} {{ module.advanced_customization.css_class_selector }}"{% if module.advanced_customization.css_id_selector %} id="{{ module.advanced_customization.css_id_selector }}"{% endif %}>
+  <div class="two-col-wrap {% if module.width_ratio.column2_width == 100 or module.width_ratio.column1_width == 100 %}fullwidth{% endif %}">
+    <div class="flex-row {{ module.mobile_rendering_sequence }} {% if module.module_settings.include_seprator %}sepratoradded{% endif %}">
+      <div class="left-col">
+        <div class="content-outer-box">
+          {% if module.column1_content.content %}
+          <div class="content-inner">
+            {{ module.column1_content.content }}
+          </div>
+          {% endif %}
+          {% if module.column1_content.buttons %}
+          <div class="btns-grp">
+            {% for item in module.column1_content.buttons %}
+            {% if item.select_button_type == "std" %}
+            {% set href = item.button_link.url.href %}
+            {% if item.bookmark_id %}
+            {% set href = href + '#'+ item.bookmark_id %}
+            {% else %}
+            {% set href = item.button_link.url.href %}
+            {% endif %}
+            
+            {% if item.button_link.url.type is equalto "EMAIL_ADDRESS" %}
+            {% set href = "mailto:" + href %}
+            {% endif %}
+            <a href="{{ href }}" class="hs-button"
+               {% if item.button_link.open_in_new_tab %}target="_blank"{% endif %}
+               {% if item.button_link.rel %}rel="{{ item.button_link.rel }}"{% endif %}
+               >
+              {{ item.button_text }}
+            </a>
+            {% elif item.select_button_type == "cta" %}
+            {% cta guid="{{ item.cta_field }}" %}
+            {% endif %}
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      <div class="right-col">
+        <div class="content-outer-box">
+          {% if module.column2_content.content %}
+          <div class="content-inner">
+            {{ module.column2_content.content }}
+          </div>
+          {% endif %}
+          {% if module.column2_content.buttons %}
+          <div class="btns-grp">
+            {% for item in module.column2_content.buttons %}
+            {% if item.select_button_type == "std" %}
+            {% set href = item.button_link.url.href %}
+            {% if item.bookmark_id %}
+            {% set href = href + '#'+ item.bookmark_id %}
+            {% else %}
+            {% set href = item.button_link.url.href %}
+            {% endif %}
+            
+            
+            {% if item.button_link.url.type is equalto "EMAIL_ADDRESS" %}
+            {% set href = "mailto:" + href %}
+            {% endif %}
+            <a href="{{ href }}" class="hs-button"
+               {% if item.button_link.open_in_new_tab %}target="_blank"{% endif %}
+               {% if item.button_link.rel %}rel="{{ item.button_link.rel }}"{% endif %}
+               >
+              {{ item.button_text }}
+            </a>
+            {% elif item.select_button_type == "cta" %}
+            {% cta guid="{{ item.cta_field }}" %}
+            {% endif %}
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% require_css %}
+<style>
+  .two-col-cont-cm.{{name}} .left-col{
+    width: {{ module.width_ratio.column1_width }}%;
+    padding-right: {{ module.column_gap }}px;
+  }
+
+  .two-col-cont-cm.{{name}} .right-col{
+    width: {{ module.width_ratio.column2_width }}%;
+    padding-left: {{ module.column_gap }}px;
+  }
+
+  .two-col-cont-cm.{{name}} .two-col-wrap.fullwidth .left-col,
+  .two-col-cont-cm.{{name}} .two-col-wrap.fullwidth .right-col{
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  .two-col-cont-cm.{{name}} .left-col .content-outer-box{
+    {{ module.style.font_options_column_1.padding_column_1.css }}
+  }
+
+  .two-col-cont-cm.{{name}} .right-col .content-outer-box{
+    {{ module.style.font_options_column_2.padding_column_2.css }}
+  }
+
+  .two-col-cont-cm.{{name}} .left-col .content-inner{
+    font-size: {{ module.style.font_options_column_1.font_options.font_size }}px;
+    line-height: {{ module.style.font_options_column_1.font_options.line_height }};
+    font-weight: {{ module.style.font_options_column_1.font_options.font_weight }};
+    color: rgba({{ module.style.font_options_column_1.font_options.color_field.color|convert_rgb }},{{ module.style.font_options_column_1.font_options.color_field.opacity/100 }});
+  }
+
+  .two-col-cont-cm.{{name}} .right-col .content-inner{
+    font-size: {{ module.style.font_options_column_2.font_options.font_size }}px;
+    line-height: {{ module.style.font_options_column_2.font_options.line_height }};
+    font-weight: {{module.style.font_options_column_2.font_options.font_weight }};
+    color: rgba({{ module.style.font_options_column_2.font_options.color_field.color|convert_rgb }},{{ module.style.font_options_column_2.font_options.color_field.opacity/100 }});
+  }
+
+  .two-col-cont-cm.{{name}} .flex-row.sepratoradded .left-col {
+    border-right: {{ module.module_settings.width }}px solid rgba({{ module.module_settings.color_field_1.color|convert_rgb }},{{ module.module_settings.color_field_1.opacity/100 }});
+  }
+
+  @media (max-width: 767px){
+    .two-col-cont-cm.{{name}} .left-col{
+      padding-right: 0px;
+      width: 100%;
+    }
+
+    .two-col-cont-cm.{{name}} .flex-row.sepratoradded .left-col {
+      border-right: 0;
+    }
+
+    .two-col-cont-cm.{{name}} .right-col{
+      padding-left: 0px;
+      width: 100%;
+    }
+
+    .two-col-cont-cm.{{name}} .flex-row.order_two {   
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: reverse;
+      -ms-flex-direction: column-reverse;
+      flex-direction: column-reverse;
+    }
+
+    {% if module.style.font_options_column_1.font_options.change_font_style_in_mobile %}
+    .two-col-cont-cm.{{name}} .left-col .content-inner{
+      font-size: {{ module.style.font_options_column_1.font_options.font_size_mobile }}px;
+      line-height: {{ module.style.font_options_column_1.font_options.line_height_mobile }};
+    }
+    {% endif %}
+
+
+    {% if module.style.font_options_column_2.font_options.change_font_style_in_mobile %}
+    .two-col-cont-cm.{{name}} .right-col .content-inner{
+      font-size: {{ module.style.font_options_column_2.font_options.font_size_mobile }}px;
+      line-height:{{ module.style.font_options_column_2.font_options.line_height_mobile }};
+    }
+    {% endif %}
+
+    {% if module.style.font_options_column_1.change_spacing_in_mobile %}
+    .two-col-cont-cm.{{name}} .left-col .content-outer-box{
+      {{ module.style.font_options_column_1.mobile_spacings.css }}
+    }
+    {% endif %}
+
+    {% if module.style.font_options_column_2.change_spacing_in_mobile %}
+    .two-col-cont-cm.{{name}} .right-col .content-outer-box{
+      {{ module.style.font_options_column_2.mobile_spacings.css }}
+    }
+    {% endif %}
+
+  }
+</style>
+{% end_require_css %}
+
+
+

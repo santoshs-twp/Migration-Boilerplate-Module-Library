@@ -1,0 +1,162 @@
+<div class="multipurpose-button-cm {{name}} {{ module.advanced_customization.css_class_selector }}" id="{{ module.advanced_customization.css_id_selector }}">
+  {% if module.button_type %}
+  <div class="buttn-wrapper">
+    {% set href = module.link_field.url.href %}
+    {% if module.link_field.url.type is equalto "EMAIL_ADDRESS" %}
+    {% set href = "mailto:" + href %}
+    {% endif %}
+
+    {% if module.button_type == "external" %}
+
+    <a href="{{ href }}" class="cstm hs-button"
+       {% if module.link_field.open_in_new_tab %}target="_blank"{% endif %}
+       {% if module.link_field.rel %}rel="{{ module.link_field.rel }}"{% endif %}
+       >
+      {{ module.button_text }}
+    </a>
+
+    {% elif module.button_type == "content1" %}
+    <a href="{{ href }}" class="cstm hs-button"
+       {% if module.page_link.open_in_new_tab %}target="_blank"{% endif %}
+       {% if module.page_link.rel %}rel="{{ module.page_link.rel }}"{% endif %}
+       >
+      {{ module.button_text }}
+    </a>
+
+    {% elif module.button_type == "file" %}
+    <a href="{{ module.file_field }}" class="cstm hs-button">
+      {{ module.button_text }}
+    </a>
+
+    {% elif module.button_type == "email" %}
+    <a href="mailto:{{ module.email_address }}" class="cstm hs-button">
+      {{ module.button_text }}
+    </a>
+
+    {% elif module.button_type == "bookmark" %}
+    {% set href = module.page_link.url.href %}
+    {% if module.bookmark_id %}
+    {% set href = href + '#'+ module.bookmark_id %}
+    {% else %}
+    {% set href = module.page_link.url.href %}
+    {% endif %}
+
+    <a href="{{href}}" class="cstm hs-button">
+      {{ module.button_text }}
+    </a>
+
+    {% elif module.button_type == "modal_form" %}
+    <a href="javascript:void(0)" class="cstm hs-button modal_btn">
+      {{ module.button_text }}
+    </a>
+    {% elif module.button_type == "modal_content" %}
+    <a href="javascript:void(0)" class="cstm hs-button modal_btn">
+      {{ module.button_text }}
+    </a>
+
+    {% elif module.button_type == "cta" %}
+    {% cta guid="{{ module.cta_field }}" %}
+    {% endif %}
+  </div>
+  {% endif %}
+
+
+  {% if module.button_type == "modal_form" or module.button_type == "modal_content" %}
+  {% if module.select_form.form_id or module.modal_content %}
+  <div class="multibtn-popup-form">
+    <div class="popup-outer">
+      <div class="closepop">x</div>
+      {% if module.button_type == "modal_form" %}
+      {% if module.select_form.form_id %}
+      <div class="multibtn_form">
+        {% form
+	form_to_use="{{ module.select_form.form_id }}"
+	response_response_type="{{ module.select_form.response_type }}"
+	response_message="{{ module.select_form.message }}"
+	response_redirect_id="{{ module.select_form.redirect_id }}"
+	response_redirect_url="{{module.select_form.redirect_url}}"
+	gotowebinar_webinar_key="{{ module.select_form.gotowebinar_webinar_key }}"
+%}
+        {% endif %}
+      </div>
+      {% endif %}
+      {% if module.button_type == "modal_content" %}
+      <div class="multibtn-pop-cont">
+        {{ module.modal_content }}
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+  {% endif %}
+  {% endif %}
+</div>
+
+
+
+
+{% require_css %}
+
+<style>
+  .multipurpose-button-cm.{{name}} .buttn-wrapper a.cstm{
+    font-size: {{ module.style.button_style.font_size }}px;
+    line-height: {{ module.style.button_style.line_height }};
+    font-weight: {{ module.style.button_style.font_weight }};
+    color: rgba({{ module.style.button_style.text_color.color|convert_rgb }},{{ module.style.button_style.text_color.opacity/100 }});
+    background-color: rgba({{ module.style.button_style.background_color.color|convert_rgb }},{{ module.style.button_style.background_color.opacity/100 }});
+
+    {% if module.style.button_style.include_border %}
+    border: {{ module.style.button_style.border.width }}px {{ module.style.button_style.border.type }} rgba({{ module.style.button_style.border.color_field.color|convert_rgb }},{{ module.style.button_style.border.color_field.opacity/100 }});
+    {% endif %}
+  }
+
+
+  .multipurpose-button-cm.{{name}} .buttn-wrapper a.cstm:hover{
+    color: rgba({{ module.style.button_style.text_hover_color.color|convert_rgb }},{{ module.style.button_style.text_hover_color.opacity/100 }});
+    background-color: rgba({{ module.style.button_style.background_hover_color.color|convert_rgb }},{{ module.style.button_style.background_hover_color.opacity/100 }});
+
+    {% if module.style.button_style.include_border %}
+    border-color: rgba({{ module.style.button_style.border.hover_color.color|convert_rgb }},{{ module.style.button_style.border.hover_color.opacity/100 }});
+    {% endif %}
+  }
+
+  {% if module.button_type == "modal_form" or module.button_type == "modal_content" %}
+  .multipurpose-button-cm.{{name}} .multibtn-popup-form .closepop{
+    color: rgba({{ module.style.modal_window.icon_color.color|convert_rgb }},{{ module.style.modal_window.icon_color.opacity/100 }});
+  }
+
+  .multipurpose-button-cm.{{name}} .multibtn-popup-form .closepop:hover{
+    color: rgba({{ module.style.modal_window.icon_hover_color.color|convert_rgb }},{{ module.style.modal_window.icon_hover_color.opacity/100 }});
+  }
+
+  .multipurpose-button-cm.{{name}} .multibtn-popup-form .popup-outer{
+    background-color: rgba({{ module.style.modal_window.background_color.color|convert_rgb }},{{ module.style.modal_window.background_color.opacity/100 }});
+  }
+
+  .multipurpose-button-cm.{{name}} .multibtn-popup-form .multibtn-pop-cont *{
+    color: rgba({{ module.style.modal_window.content_color.color|convert_rgb }},{{ module.style.modal_window.content_color.opacity/100 }});
+  }
+
+  .multipurpose-button-cm.{{name}} .multibtn-popup-form.modal-active::after{
+    background-color: rgba({{ module.style.modal_window.overlay_color.color|convert_rgb }},{{ module.style.modal_window.overlay_color.opacity/100 }});
+  }
+
+  {% endif %}
+
+
+  @media (max-width: 767px){
+    .multipurpose-button-cm.{{name}} .buttn-wrapper a.cstm{
+      font-size: {{ module.style.button_style.font_size_mob }}px;
+      line-height: {{ module.style.button_style.line_height_mob }};
+    }
+  }
+
+</style>
+
+{% end_require_css %}
+
+
+
+
+
+

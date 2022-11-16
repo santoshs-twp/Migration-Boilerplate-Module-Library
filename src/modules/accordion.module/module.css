@@ -1,0 +1,80 @@
+.accordion_wrap .acc-item .acc-content {
+  display: none;
+  padding: 15px;
+}
+
+.accordion_wrap .acc-item.activeaccord .acc-content {
+  display: block;
+}
+
+.accordion_wrap .acc-item .acctitle::after {
+  min-height: 100%;
+  align-items: center;
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-weight: bold;
+  display: flex;
+  width: 30px;
+}
+
+.accordion_wrap .acc-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.accordion_wrap .acc-item .acctitle {
+  position: relative;
+  padding: 15px;
+  cursor: pointer;
+}
+
+.accordion_wrap .acc-item .acctitle > * {
+  pointer-events: none;
+}
+
+.accordion_wrap .acc-item .carrortwrap {
+  position: absolute;
+  right: 0;
+  top: 0;
+  min-height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding-right: 10px;
+}
+
+.accordion_wrap .acc-item .acctitle img.up {
+  display: none;
+}
+
+.accordion_wrap .acc-item.activeaccord .acctitle img.down{
+  display: none;
+}
+
+.accordion_wrap .acc-item.activeaccord .acctitle img.up {
+  display: block;
+}
+
+.accordion_wrap .acc-item.activeaccord .acctitle img.right {
+  transform: rotate(90deg);
+}
+
+.accordion_wrap .acc-item .acctitle * {
+  margin: 0;
+} 
+
+.accordion_wrap .acc-item .acc-content .acc-btn-wrap a {
+  margin-bottom: 10px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.accordion_wrap .acc-item .acc-content .desc {
+  margin-bottom: 15px;
+}
+
+.accordion_wrap .custom-container .accord_outer{
+  overflow: hidden;
+}
+

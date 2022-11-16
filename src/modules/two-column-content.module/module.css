@@ -1,0 +1,16 @@
+.two-col-cont-cm .flex-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.two-col-cont-cm .two-col-wrap .btns-grp a {
+  margin-bottom: 10px;
+  margin-right: 5px;
+  display: inline-block;
+  vertical-align: middle;
+  box-sizing: border-box !important;
+}
+
+.two-col-cont-cm .flex-row.sepratoradded .left-col {
+  border-right: 1px solid #000;
+}

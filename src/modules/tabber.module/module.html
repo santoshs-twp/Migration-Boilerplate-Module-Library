@@ -1,0 +1,286 @@
+
+
+<div class="tabber-wrapper-module {{ name }} tab_align_{{ module.tabber_settings.desktop_stacking }} {% if module.advanced_customization.css_class_selector %} {{ module.advanced_customization.css_class_selector }} {% endif %}  tab_mob_{{ module.tabber_settings.mobile_stacking }}"{% if module.advanced_customization.css_id_selector %} id="{{ module.advanced_customization.css_id_selector }}" {% endif %}>
+  <div class="tabber-container">
+    <ul class="tab-lists">
+      {% for item in module.tabber %}
+      <li class="tab-item {% if item.make_tab_active %} tab_active{% endif %}">
+        <a href="#tab{{loop.index}}" class="tab-trigger icon_{{ item.title_icon_position }}">
+          {% if item.include_title_icon %}
+          <span class="title-icon">
+            {% if item.select_icon_type == "icon" %}
+            {% icon
+        name="{{ item.title_icon.name }}"
+        style="{{ item.title_icon.type }}"
+        unicode="{{ item.title_icon.unicode }}"
+        icon_set="{{ item.title_icon.icon_set }}"
+      %}
+            {% elif item.select_icon_type == "image" %}
+            {% if item.icon_image.src %}
+            {% set loadingAttr = item.icon_image.loading != 'disabled' ? 'loading="{{ item.icon_image.loading }}"' : '' %}
+            <img src="{{ item.icon_image.src }}" alt="{{ item.icon_image.alt }}" {{ loadingAttr }}>
+            {% endif %}
+            {% else %}
+
+            {% endif %}
+          </span> 
+          {% endif %}
+          <span>
+            {{ item.tab_title }}
+          </span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+
+    <div class="tab-content-wrp">
+      {% for item in module.tabber %}
+      <div class="tab-item-content {% if item.make_tab_active %} tab_active{% endif %}  {% if module.style.active_tab_style.border.remove_content_border %} hide-content-border {% endif %}" content-id="tab{{loop.index}}">
+        <div class="tab-content-sequence">
+          <{{ item.title_tag }}> 
+          <span>{{ item.tab_title }}</span>
+          </{{ item.title_tag }}>
+          {% if item.tab_content %}
+          <div class="tab-content">
+        {{ item.tab_content }}
+      </div>
+      {% endif %}
+
+      {% if item.include_button %}
+      <div class="tab-buttons">
+        {% for item2 in item.buttons %}
+        <div class="tab-button">
+          {% if item2.select_button_type == "standard" %}
+          {% set href = item2.button_link.url.href %}
+          {% if item2.bookmark_id %}
+          {% set href = href + '#'+ item2.bookmark_id %}
+          {% else %}
+          {% set href = item2.button_link.url.href %}
+          {% endif %}
+
+          {% if item2.button_link.url.type is equalto "EMAIL_ADDRESS" %}
+          {% set href = "mailto:" + href %}
+          {% endif %}
+          <a href="{{ href }}" class="hs-button"
+             {% if item2.button_link.open_in_new_tab %}target="_blank"{% endif %}
+             {% if item2.button_link.rel %}rel="{{ item2.button_link.rel }}"{% endif %}
+             >
+            {{ item2.button_text }}
+          </a>
+          {% endif %}
+
+          {% if item2.select_button_type == "cta" %}
+          {% cta guid="{{ item2.cta_field }}" %}
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      {% if item.include_form or item.form_field.form_id %}
+      <div class="tab-form">
+        {% form
+            form_to_use="{{ item.form_field.form_id }}"
+            response_response_type="{{ item.form_field.response_type }}"
+            response_message="{{ item.form_field.message }}"
+            response_redirect_id="{{ item.form_field.redirect_id }}"
+            response_redirect_url="{{item.form_field.redirect_url}}"
+            gotowebinar_webinar_key="{{ item.form_field.gotowebinar_webinar_key }}"
+          %}
+      </div>
+      {% endif %}
+
+
+    </div>
+
+
+  </div>
+  {% endfor %}
+</div>
+
+</div>
+</div>
+
+{% require_css %}
+
+<style>
+
+  .{{name}}.tabber-wrapper-module .tab-lists li:first-child .tab-trigger {
+    border-top-left-radius:{{ module.style.tab_style.radius }}px;
+  }
+
+  .{{name}}.tabber-wrapper-module .tab-lists li:last-child .tab-trigger {
+    border-top-right-radius:{{ module.style.tab_style.radius }}px;
+  }
+
+  .{{name}}.tabber-wrapper-module .tab-item-content.tab_active {
+    border-bottom-left-radius:{{ module.style.tab_style.radius }}px;
+    border-bottom-right-radius:{{ module.style.tab_style.radius }}px;
+  }
+
+  .{{name}}.tabber-wrapper-module.tab_align_vertical .tab-lists li:last-child .tab-trigger {
+    border-radius: 0;
+    border-bottom-left-radius:{{ module.style.tab_style.radius }}px;
+  }
+
+  .{{name}}.tabber-wrapper-module.tab_align_vertical .tab-item-content.tab_active{
+    border-top-right-radius:{{ module.style.tab_style.radius }}px;
+  }
+
+  .{{ name }}.tabber-wrapper-module .tab-lists .tab-trigger{
+    {% if module.style.tab_style.override_text_style %}
+    font-weight:{{ module.style.tab_style.text_style.font_weight }};
+    font-size:{{ module.style.tab_style.text_style.font_size }}px;
+    color:rgba({{ module.style.tab_style.text_style.color_field.color|convert_rgb }},{{ module.style.tab_style.text_style.color_field.opacity * 0.01 }});
+    line-height:{{ module.style.tab_style.text_style.line_height }};
+    {% endif %}
+    background-color:rgba({{ module.style.tab_style.background.background_color.color|convert_rgb }},{{ module.style.tab_style.background.background_color.opacity * 0.01 }});
+    border-width:{{ module.style.tab_style.border.width }}px;
+    border-style:{{ module.style.tab_style.border.type }};
+    border-color:rgba({{ module.style.tab_style.border.color.color|convert_rgb }},{{ module.style.tab_style.border.color.opacity * 0.01 }});
+  }
+
+  .{{ name }}.tabber-wrapper-module:not(.tab_align_vertical) .tab-lists .tab-item{
+    margin-left:-{{ module.style.tab_style.border.width }}px;
+    margin-right:-{{ module.style.tab_style.border.width }}px;
+  }
+
+  .{{ name }}.tabber-wrapper-module .tab-item-content{
+    {% if module.style.tab_style.border.remove_content_border == "false" %}
+    border-width:{{ module.style.tab_style.border.width }}px;
+    border-style:{{ module.style.tab_style.border.type }};
+    border-color:rgba({{ module.style.tab_style.border.color.color|convert_rgb }},{{ module.style.tab_style.border.color.opacity * 0.01 }});
+    {% endif %}
+  }
+
+  .{{ name }}.tabber-wrapper-module .tab-lists .tab-trigger .title-icon svg{
+    fill:rgba({{ module.style.tab_style.icon_color.color|convert_rgb }},{{ module.style.tab_style.icon_color.opacity*0.01 }});
+  }
+
+  .{{ name }}.tabber-wrapper-module.tab_align_vertical ul.tab-lists>li a.tab-trigger{
+    border-bottom-color:rgba({{ module.style.active_tab_style.border.color.color|convert_rgb }},{{ module.style.active_tab_style.border.color.opacity100 }});\
+  }
+
+  .{{name}}.tabber-wrapper-module ul.tab-lists li a.tab-trigger:hover:after,
+  .{{name}}.tabber-wrapper-module ul.tab-lists li.tab_active a.tab-trigger:after{
+    background-color:rgba({{ module.style.tab_style.background.background_color.color|convert_rgb }},{{ module.style.tab_style.background.background_color.opacity * 0.01 }});
+  }
+
+  .{{ name }}.tabber-wrapper-module .tab-lists .tab-item .tab-trigger:hover,
+  .{{ name }}.tabber-wrapper-module .tab-lists .tab-item.tab_active .tab-trigger{
+    {% if module.style.active_tab_style.override_active_text_style %}
+    font-weight:{{ module.style.active_tab_style.text_style.font_weight }};
+    font-size:{{ module.style.active_tab_style.text_style.font_size }}px;
+    color:rgba({{ module.style.active_tab_style.text_style.color_field.color|convert_rgb }},{{ module.style.active_tab_style.text_style.color_field.opacity*0.01 }});
+    line-height:{{ module.style.active_tab_style.text_style.line_height }};
+    {% endif %}
+    background-color:rgba({{ module.style.active_tab_style.background.background_color.color|convert_rgb }},{{ module.style.active_tab_style.background.background_color.opacity*0.01 }});
+    border-width:{{ module.style.active_tab_style.border.width }}px;
+    border-style:{{ module.style.active_tab_style.border.type }};
+    border-color:rgba({{ module.style.active_tab_style.border.color.color|convert_rgb }},{{ module.style.active_tab_style.border.color.opacity*0.01 }});
+  }
+
+  .{{ name }}.tabber-wrapper-module.tab_align_vertical ul.tab-lists>li.tab_active a.tab-trigger{
+    border-bottom-color:rgba({{ module.style.active_tab_style.border.color.color|convert_rgb }},{{ module.style.active_tab_style.border.color.opacity*0.01 }});
+  }
+
+  .{{ name }}.tabber-wrapper-module .tab-item-content.tab_active{
+    {% if module.style.active_tab_style.border.remove_content_border == "false" %}
+    border-width:{{ module.style.active_tab_style.border.width }}px;
+    border-style:{{ module.style.active_tab_style.border.type }};
+    border-color:rgba({{ module.style.active_tab_style.border.color.color|convert_rgb }},{{ module.style.active_tab_style.border.color.opacity*0.01 }});
+    {% endif %}
+    background-color:rgba({{ module.style.active_tab_style.background.content_background_color.color|convert_rgb }},{{ module.style.active_tab_style.background.content_background_color.opacity*0.01 }});
+  }
+
+  .{{ name }}.tabber-wrapper-module .tab-lists .tab-item .tab-trigger:hover .title-icon svg,
+  .{{ name }}.tabber-wrapper-module .tab-lists .tab-item.tab_active .tab-trigger .title-icon svg{
+    fill:rgba({{ module.style.active_tab_style.icon_color.color|convert_rgb }},{{ module.style.active_tab_style.icon_color.opacity * 0.01 }});
+  }
+
+  .{{ name }}.tabber-wrapper-module ul.tab-lists a.tab-trigger .title-icon{
+    width:{{ module.style.active_tab_style.text_style.font_size }}px;
+    height:{{ module.style.active_tab_style.text_style.font_size }}px;
+  }
+
+  .{{ name }}.tabber-wrapper-module ul.tab-lists li.tab_active a.tab-trigger:after{
+    background-color:rgba({{ module.style.active_tab_style.background.content_background_color.color|convert_rgb }},{{ module.style.active_tab_style.background.content_background_color.opacity*0.01 }});
+  }
+
+  .{{ name }}.tabber-wrapper-module.tab_align_vertical ul.tab-lists>li a.tab-trigger{
+    border-bottom-color: rgba({{ module.style.tab_style.border.color.color|convert_rgb }},{{ module.style.tab_style.border.color.opacity * 0.01 }});
+  }
+
+  .{{ name }}.tabber-wrapper-module.tab_align_vertical ul.tab-lists>li.tab_active a.tab-trigger{
+    border-bottom-color:rgba({{ module.style.active_tab_style.border.color.color|convert_rgb }},{{ module.style.active_tab_style.border.color.opacity*0.01 }});
+  }
+
+  .{{ name }}.tabber-wrapper-module.tab_align_vertical ul.tab-lists li.tab-item {
+    margin-top:-{{ module.style.tab_style.border.width }}px;
+    margin-bottom:-{{ module.style.tab_style.border.width }}px;
+  }
+
+  @media (max-width:767px) {
+
+    .{{ name }}.tabber-wrapper-module.tab_mob_vertical ul.tab-lists>li.tab_active a.tab-trigger{
+      border-color:rgba({{ module.style.tab_style.border.color.color|convert_rgb }},{{ module.style.tab_style.border.color.opacity * 0.01 }});
+    }
+
+    .{{ name }}.tabber-wrapper-module.tab_mob_vertical ul.tab-lists li.tab_active a.tab-trigger:after{
+      display:none
+    }
+
+    .{{ name }}.tabber-wrapper-module.tab_mob_hori_wrap ul.tab-lists>li.tab_active a.tab-trigger,
+    .{{ name }}.tabber-wrapper-module.tab_mob_hori_wrap ul.tab-lists>li a.tab-trigger{
+      border-color:rgba({{ module.style.tab_style.border.color.color|convert_rgb }},{{ module.style.tab_style.border.color.opacity * 0.01 }});
+    }
+
+    .{{ name }}.tabber-wrapper-module.tab_mob_hori_wrap ul.tab-lists>li.tab_active a.tab-trigger:after,
+    .{{ name }}.tabber-wrapper-module.tab_mob_hori_wrap ul.tab-lists>li a.tab-trigger:after{
+      display:none;
+    }
+
+    .{{ name }}.tabber-wrapper-module.tab_mob_hori_wrap ul.tab-lists {
+      flex-wrap: wrap;
+    }
+
+    {% if module.style.tab_style.text_style.change_font_style_in_mobile %}
+    .{{ name }}.tabber-wrapper-module .tab-lists .tab-trigger{
+      font-size:{{ module.style.tab_style.text_style.mobile_font_size }}px;
+      line-height:{{ module.style.tab_style.text_style.mobile_line_height }};
+    }
+    {% endif %}
+    {% if module.style.active_tab_style.text_style.change_active_font_size_in_mobile %}
+    .{{ name }}.tabber-wrapper-module .tab-lists .tab-item.tab_active .tab-trigger{
+      font-size:{{ module.style.active_tab_style.text_style.mobile_font_size }}px;
+      line-height:{{ module.style.active_tab_style.text_style.active_line_height }};
+    }
+    {% endif %}
+
+    .{{name}}.tabber-wrapper-module.tab_mob_vertical .tab-lists li:last-child .tab-trigger,
+    .{{name}}.tabber-wrapper-module.tab_align_vertical .tab-lists li:last-child .tab-trigger,
+    .{{name}}.tabber-wrapper-module.tab_align_vertical .tab-item-content.tab_active{
+      border-radius:0;
+    }
+
+    .{{name}}.tabber-wrapper-module.tab_mob_vertical .tab-item-content.tab_active,
+    .{{name}}.tabber-wrapper-module.tab_align_vertical .tab-item-content.tab_active{
+      border-bottom-right-radius:{{ module.style.tab_style.radius }}px;
+      border-bottom-left-radius:{{ module.style.tab_style.radius }}px;
+    }
+
+    .{{name}}.tabber-wrapper-module.tab_mob_vertical .tab-lists li:first-child .tab-trigger,
+    .{{name}}.tabber-wrapper-module.tab_align_vertical .tab-lists li:first-child .tab-trigger{
+      border-top-right-radius:{{ module.style.tab_style.radius }}px;
+    }
+
+  }
+
+
+</style>
+
+{% end_require_css %}
+
+
+
+

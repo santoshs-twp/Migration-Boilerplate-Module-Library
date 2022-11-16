@@ -1,0 +1,44 @@
+[ {
+  "id" : "show_title",
+  "name" : "show_title",
+  "display_width" : null,
+  "label" : "Show Title",
+  "required" : false,
+  "locked" : false,
+  "display" : "checkbox",
+  "type" : "boolean",
+  "default" : false
+}, {
+  "id" : "form_title",
+  "name" : "form_title",
+  "display_width" : null,
+  "label" : "Form Title",
+  "required" : false,
+  "locked" : false,
+  "validation_regex" : "",
+  "visibility" : {
+    "controlling_field" : "show_title",
+    "controlling_field_path" : null,
+    "controlling_value_regex" : "true",
+    "property" : null,
+    "operator" : "EQUAL",
+    "access" : null,
+    "hidden_subfields" : null
+  },
+  "allow_new_line" : false,
+  "show_emoji_picker" : false,
+  "type" : "text",
+  "default" : "Subscribe to our blog!"
+}, {
+  "id" : "response_message",
+  "name" : "response_message",
+  "display_width" : null,
+  "label" : "Response Message",
+  "required" : false,
+  "locked" : false,
+  "validation_regex" : "",
+  "allow_new_line" : false,
+  "show_emoji_picker" : false,
+  "type" : "text",
+  "default" : "Thanks for Subscribing!"
+} ]

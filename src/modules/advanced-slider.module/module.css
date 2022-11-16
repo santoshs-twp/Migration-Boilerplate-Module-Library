@@ -1,0 +1,153 @@
+.advanced-slider img {
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
+
+
+.advanced-slider .slick-prev:before,
+.advanced-slider .slick-next:before {
+  color: #000;
+}
+
+.advanced-slider .carousel-bg-img {
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 500px;
+  background-color: #000;
+}
+
+.advanced-slider .carousel-bg-img * {
+  color: #fff;
+}
+
+.advanced-slider .prev.slick-arrow,
+.advanced-slider .next.slick-arrow {
+  height: 35px;
+  left: 10px;
+  position: absolute;
+  top: 50%;
+  cursor: pointer;
+  width: 35px;
+}
+
+.advanced-slider {
+  position: relative;
+}
+
+.advanced-slider .next.slick-arrow {
+  left: auto;
+  right: 10px;
+}
+
+.advanced-slider .button-item a,
+.advanced-slider .button-item a.cta_button {
+  padding: 10px 25px !important;
+  font-size: 16px !important;
+  box-sizing: border-box !important;
+}
+
+.advanced-slider .buttons {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.advanced-slider .buttons > div {
+  margin-right: 10px;
+}
+
+.advanced-slider .carousel-bg-img.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.advanced-slider .carousel-bg-img.bottom_center,
+.advanced-slider .carousel-bg-img.top_center {
+  display: flex;
+  justify-content: center;
+}
+
+.advanced-slider .carousel-bg-img.bottom_center {
+  align-items: end;
+}
+
+.advanced-slider .carousel-bg-img.top_right {
+  display: flex;
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.advanced-slider .carousel-bg-img.center_left {
+  display: flex;
+  align-items: center;
+}
+
+.advanced-slider .carousel-bg-img.center_right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.advanced-slider .carousel-bg-img.bottom_left {
+  display: flex;
+  align-items: flex-end;
+}
+
+.advanced-slider .carousel-bg-img.bottom_right {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.advanced-slider .carousel-bg-img .buttons {
+  display: block;
+}
+
+.advanced-slider .carousel-bg-img .buttons > div {
+  display: inline-block;
+}
+
+.advanced-slider .slider-item-inner.above {
+  flex-direction: column-reverse;
+  display: flex;
+}
+
+.advanced-slider .slider-item-inner.above .caption {
+  padding-bottom: 20px;
+}
+
+.advanced-slider.carousel .carousel-bg-img {
+  padding: 0 50px;
+}
+
+.advanced-slider.thumbnail .thumbnail-slider {
+  padding-top: 20px;
+}
+
+.advanced-slider .buttons .button-item {
+  margin-bottom: 15px;
+}
+
+.advanced-slider .thumbnail-slider-inner{
+  cursor:pointer; 
+}
+
+@media (min-width:768px) {
+
+  .advanced-slider .carousel-bg-img .caption {
+    max-width: 50%;
+  }
+
+}
+
+@media (max-width:767px) {
+
+  .advanced-slider .slider-item .carousel-bg-img .caption{
+    max-width:100% !important;
+  }
+
+}

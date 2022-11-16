@@ -1,0 +1,208 @@
+<div class="cont-with-bg_module {{name}} {{ module.advanced_customization.css_class_selector }}" id="{{ module.advanced_customization.css_id_selector }}">
+  <div class="inner-sec {% if module.background_options.select_background_type == "video" %}vidadded{% endif %}">
+    <div class="background-wrapper">
+      {% if module.background_options.select_background_type == "imgoverlay" %} 
+      <div class="bgimgoverlay {% if module.background_options.include_parallax %}parallax{% endif %}" data-speed="1.15" style="background-image: url({{ module.background_options.background_image.src }});"></div>
+
+      {% elif module.background_options.select_background_type == "color" %} 
+      <div class="bgwithcolor" style="background-color: rgba({{ module.background_options.background_color.color|convert_rgb }},{{ module.background_options.background_color.opacity/100 }});"> </div>
+
+      {% elif module.background_options.select_background_type == "gradient" %} 
+      <div class="bgwithgradient"> </div>
+
+      {% elif module.background_options.select_background_type == "video" %} 
+      {% if module.background_options.select_video_type == "videofile" %}
+      <video class="bgwithvideo {% if module.background_options.include_parallax %}parallax{% endif %}" autoplay muted loop src="{{ module.background_options.file_field }}"></video>
+
+      {% elif module.background_options.select_video_type == "externalvid" %}
+      <iframe class="{% if module.background_options.include_parallax %}parallax{% endif %}" src="{{ module.background_options.external_video|split('?')|first }}?autoplay=1&loop=1&mute=1&showinfo=0&controls=0&playlist={{ module.background_options.external_video|split('?')|first|split('/')|last }}" frameborder="0" allowFullScreen></iframe>
+      {% endif %}
+      {% endif %}      
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="desc">
+          {{ module.content.richtext_field }}
+        </div>
+        <div class="btn-items">
+          {% for item in module.content.button_items %}
+          {% if item.select_button_type == "std" %}
+          {% set href = item.button_link.url.href %}
+          {% if item.bookmark_id %}
+          {% set href = href + '#'+ item.bookmark_id %}
+          {% else %}
+          {% set href = item.button_link.url.href %}
+          {% endif %}
+
+          {% if item.button_link.url.type is equalto "EMAIL_ADDRESS" %}
+          {% set href = "mailto:" + href %}
+          {% endif %}
+          <a href="{{ href }}" class="hs-button"
+             {% if item.button_link.open_in_new_tab %}target="_blank"{% endif %}
+             {% if item.button_link.rel %}rel="{{ item.button_link.rel }}"{% endif %}
+             >
+            {{ item.button_text }}
+          </a>
+          {% elif item.select_button_type == "cta" %}
+          {% cta guid="{{ item.cta_field }}" %}
+
+          {% elif item.select_button_type == "modal_form" %}
+          <div class="btnitem">
+            <a href="#modal{{loop.index}}" class="modalbtn hs-button">
+              {{ item.button_text }}
+            </a> 
+          </div>
+
+          {% elif item.select_button_type == "modal_cont" %}
+          <div class="btnitem">
+            <a href="#modal{{loop.index}}" class="modalbtn hs-button"> 
+              {{ item.button_text }}
+            </a>
+          </div>
+          {% endif %}
+          {% endfor %}
+        </div>
+
+        {% if module.content.include_form and module.content.select_form.form_id %}
+        <div class="form_wrapper">
+          {% form
+              form_to_use="{{ module.content.select_form.form_id }}"
+              response_response_type="{{ module.content.select_form.response_type }}"
+              response_message="{{ module.content.select_form.message }}"
+              response_redirect_id="{{ module.content.select_form.redirect_id }}"
+              response_redirect_url="{{module.content.select_form.redirect_url}}"
+              gotowebinar_webinar_key="{{ module.content.select_form.gotowebinar_webinar_key }}"
+            %}
+        </div>
+        {% endif %}
+
+        <div class="cont-pop-wrap">
+          {% for item in module.content.button_items %}
+
+          <div class="contwithbg-popup-form" content-id="modal{{loop.index}}">
+            <div class="popup-outer">
+              <div class="closepop">x</div>
+              {% if item.select_button_type == "modal_form" %}
+              {% if item.modal_form.form_field.form_id %}
+              <div class="contwithbg_form">
+                {% form
+                        form_to_use="{{ item.modal_form.form_field.form_id }}"
+                        response_response_type="{{ item.modal_form.form_field.response_type }}"
+                        response_message="{{ item.modal_form.form_field.message }}"
+                        response_redirect_id="{{ item.modal_form.form_field.redirect_id }}"
+                        response_redirect_url="{{item.modal_form.form_field.redirect_url}}"
+                        gotowebinar_webinar_key="{{ item.modal_form.form_field.gotowebinar_webinar_key }}"
+                      %} 
+              </div>
+              {% endif %}
+              {% endif %}
+              {% if item.select_button_type == "modal_cont" %}
+              {% if item.modal_content %}
+              <div class="contbg-pop-cont">
+                {{ item.modal_content }}
+              </div>
+              {% endif %}
+              {% endif %}
+            </div>
+          </div>
+
+          {% endfor %}
+        </div>
+
+      </div>
+    </div> 
+
+  </div>
+</div>
+
+
+{% require_css %}
+<style>
+  {% if module.background_options.select_background_type == "imgoverlay" %} 
+  .cont-with-bg_module.{{name}} .bgimgoverlay::after {
+    background-color: rgba({{ module.background_options.overlay_color.color|convert_rgb }},{{ module.background_options.overlay_color.opacity/100 }});
+  }
+  {% endif %}
+
+  {% if module.background_options.select_background_type == "gradient" %} 
+  .cont-with-bg_module.{{name}} .bgwithgradient {
+    background-image: linear-gradient(to {{ module.background_options.gradient_direction }}, rgba({{ module.background_options.gradient_start_color.color|convert_rgb }},{{ module.background_options.gradient_start_color.opacity/100 }}), rgba({{ module.background_options.gradient_end_color.color|convert_rgb }},{{ module.background_options.gradient_end_color.opacity/100 }}));
+  }
+  {% endif %}
+
+  {% if module.background_options.select_background_type == "imgoverlay" %} 
+  .cont-with-bg_module.{{name}} .background-wrapper .bgimgoverlay{
+    background-attachment: {{ module.background_position_size_options.background_attachment }};
+    background-position: {{ module.background_position_size_options.bacckground_positions }};
+    background-size: {{ module.background_position_size_options.background_size }};
+  }
+  {% endif %}
+
+  {% if module.background_options.include_parallax %}
+  .cont-with-bg_module.{{name}} .background-wrapper .bgimgoverlay{
+    background-attachment: scroll;
+  }
+  {% endif %}
+
+  {% if module.background_options.select_background_type == "video" %}
+  .cont-with-bg_module.{{name}} .inner-sec.vidadded .background-wrapper:after{
+    background-color: rgba({{ module.background_options.overlay_color.color|convert_rgb }},{{ module.background_options.overlay_color.opacity/100 }});
+  }
+  {% endif %}
+
+  .cont-with-bg_module.{{name}} .inner-sec .content .desc *{
+    color: rgba({{ module.style.font_options.color_field.color|convert_rgb }},{{ module.style.font_options.color_field.opacity/100 }})
+  }
+
+  .cont-with-bg_module.{{name}} .inner-sec .content{
+    {{ module.style.spacings.spacing_field.css }};
+  }
+
+  {% if module.style.spacings.change_spacing_in_mobile %}
+  @media (max-width: 767px){
+    .cont-with-bg_module.{{name}} .inner-sec .content{
+      {{ module.style.spacings.mobile_spacing.css }}
+    }   
+  }
+  {% endif %}
+
+
+</style>
+{% end_require_css %}
+
+
+
+
+
+{# parallax script #}
+{% if module.background_options.include_parallax %}
+{% require_js%}
+<script>
+  var parallaxElements = document.querySelectorAll('.cont-with-bg_module .background-wrapper .parallax');
+  if(parallaxElements){
+    var parallax = function(elements) {
+      if ('undefined' !== elements && elements.length > 0) {
+        elements.forEach(function(element) {
+          var y = window.innerHeight - element.getBoundingClientRect().top
+          if (y > 0) {
+            element.style.transform = 'translate3d(0, -' + (0.050 * y) + 'px ,0)'
+          }
+        })
+      }
+    }
+    parallax(parallaxElements);
+    window.onscroll = function() {
+      parallax(parallaxElements);
+    }
+  }
+</script>
+{% end_require_js%}
+{% endif %}
+
+
+
+
+
+{{  }}
+

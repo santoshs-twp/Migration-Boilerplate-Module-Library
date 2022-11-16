@@ -1,0 +1,63 @@
+.multipurpose-button-cm .multibtn-popup-form {
+  align-items: center;
+  display: none;
+  height: 100vh;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+}
+
+.multipurpose-button-cm a{
+  display: inline-block;
+  border: 0;
+}
+
+.multipurpose-button-cm .multibtn-popup-form .multibtn_form {
+  padding: 40px 20px;
+}
+
+.multipurpose-button-cm .multibtn-popup-form .popup-outer {
+  background: #fff;
+  box-shadow: 0 20px 40px rgb(21 17 58 / 25%);
+  height: auto;
+  overflow: auto;
+  width: 95%;
+  max-width: 500px;
+  max-height: calc(100vh - 100px);
+  position: relative;
+}
+
+.multipurpose-button-cm .multibtn-popup-form .closepop {
+  position: absolute;
+  right: 0%;
+  width: 30px;
+  font-size: 30px;
+  cursor: pointer;
+  padding-top: 4px;
+}
+
+.multipurpose-button-cm .multibtn-popup-form .multibtn-pop-cont {
+  padding: 40px 20px;
+}
+
+.multipurpose-button-cm .multibtn-popup-form.modal-active {
+  display: flex;
+}
+
+.multipurpose-button-cm .multibtn-popup-form.modal-active::after {
+  position: absolute;
+  content: '';
+  height: 100%;
+  width: 100%;
+  background-color: #000;
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: -1;
+}
+
+
+
+

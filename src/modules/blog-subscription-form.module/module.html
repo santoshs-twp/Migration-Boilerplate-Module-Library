@@ -1,0 +1,5 @@
+<div class="subscription-form">
+	{% blog_subscribe "blog_subscribe_form" path="@hubspot/blog_subscribe",
+         title='{{ module.form_title }}', response_message='{{ module.response_message }}', label='Blog Email Subscription', no_title={{ !module.show_title }}
+        %}
+</div>

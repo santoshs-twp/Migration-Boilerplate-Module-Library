@@ -1,0 +1,101 @@
+<div class="sidebar {{ module.number_of_columns }}">
+	<section class="blog-index">
+		{% if tag %}
+		<div class="blog-index__tag-header">
+			<div class="blog-index__tag-subtitle">Posts about</div>
+			<h1 class="blog-index__tag-heading">{{ page_meta.html_title|split(' | ')|last }}</h1>
+		</div>
+		{% endif %}
+
+		{# Blog listing #}
+		{% for content in contents %}
+
+		{# Set featured image #}
+		{# This checks to see if a user is opted into the blog listing editing experience. If they are it uses the conditional from the module. If they are not it uses the conditional from blog settings #}
+			{% set show_featured_image = false %}
+			{% if content.featured_image %}
+				{% if blog.listing_page_id %}
+					{% if module.featured_image %}
+					  {% set show_featured_image = true %}
+					{% endif %}
+		    {% else %}
+					{% if group.use_featured_image_in_summary %}
+					  {% set show_featured_image = true %}
+					{% endif %}
+				{% endif %}
+			{% endif %}
+		{# End set featured image #}
+		
+		<article class="blog-index__post blog-index__post--small" aria-label="Blog post summary: {{ content.name }}" id="{{ content.name|lower|replace(' ','')|replace('$','')|replace(",","")|replace("#","") }}">
+			<div class="blog-index__post-inner-card{% if not content.featured_image %} no-image{% endif %}">
+				{% if show_featured_image == true %}
+					<a class="blog-index__post-image blog-index__post-image--small" style="background-image: url('{{ content.featured_image }}');" href="{{ content.absolute_url }}" aria-label="{% if content.featured_image_alt_text %}Featured image: {{ content.featured_image_alt_text }} - {% endif %}Read full post: {{ content.name }}">
+					</a>
+				{% endif %}
+				<div class="blog-index__post-content  blog-index__post-content--small">
+					
+					{# Tags #}
+						{% if module.tags %}
+							{% if content.tag_list %}
+							<div class="blog-post__tags">
+								{% for tag in content.tag_list %}
+								<a class="blog-post__tag-link" href="{{ blog_tag_url(group.id, tag.slug) }}">{{ tag.name }}</a>{% if not loop.last %},{% endif %}
+								{% endfor %}
+							</div>
+							{% endif %}
+						{% endif %}
+					{# End tags #}
+					
+					{# Title #}
+						{% if module.post_title %}
+							<h2><a href="{{ content.absolute_url }}">{{ content.name }}</a></h2>
+						{% endif %}
+					{# End title #}
+					
+          {# Summary #}
+          {# This checks to see if a user is opted into the blog listing editing experience. If they are it uses the conditional from the module. If they are not it uses the conditional from blog settings #}
+						{% if blog.listing_page_id %}
+							{% if module.description %}
+								{{ content.post_list_content|truncatehtml(100)|striptags|safe }}
+							{% endif %}
+						{% else %}
+							{% if content_group.show_summary_in_listing %}
+								{{ content.post_list_content|truncatehtml(100)|striptags|safe }}
+							{% endif %}
+						{% endif %}
+          {# End summary #}
+					
+					<div class="blog-post__meta-section{% if !module.reading_minutes %} no-min{% endif %}">
+						
+						{# Reading Minutes #}
+							{% if module.reading_minutes %}
+							<div class="blog-post__read-minutes">
+								{% set initialPostWords = content.post_body|striptags|wordcount %}
+								{% set calculatedPostWords = (initialPostWords/100) * 100 %}
+								{% set finishedPostWords = calculatedPostWords|divide(300)|round(2) %}
+								{% set number = finishedPostWords|round %}
+								{% if number < 1 %}
+								{% else %}
+								{{ finishedPostWords|round }} minute read
+								{% endif %}
+							</div>
+							{% endif %}
+						{# End reading minutes #}
+						
+						{# Read more button #}
+							{% if module.read_more %}
+								<div class="blog-post__read-more">
+									<a href="{{ content.absolute_url }}">{{ module.read_more_text }}<span class="read-more__arrow">{% icon name="long-arrow-alt-right" style="SOLID" %}</span></a>
+								</div>
+							{% endif %}
+            {# End read more button #}
+						
+					</div>
+				</div>
+			</div>
+		</article>
+		{% endfor %}
+		{# End blog listing #}
+
+	</section>
+</div>
