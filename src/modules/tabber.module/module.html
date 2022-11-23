@@ -4,7 +4,7 @@
   <div class="tabber-container">
     <ul class="tab-lists">
       {% for item in module.tabber %}
-      <li class="tab-item {% if item.make_tab_active %} tab_active{% endif %}">
+      <li class="tab-item {% if item.make_tab_active %} tab_active{% endif %} tab-trigger{{loop.index}}">
         <a href="#tab{{loop.index}}" class="tab-trigger icon_{{ item.title_icon_position }}">
           {% if item.include_title_icon %}
           <span class="title-icon">
@@ -140,6 +140,12 @@
     border-color:rgba({{ module.style.tab_style.border.color.color|convert_rgb }},{{ module.style.tab_style.border.color.opacity * 0.01 }});
   }
 
+  {% if module.style.tab_style.override_text_style %}
+  .{{ name }}.tabber-wrapper-module ul.tab-lists .tab-item .tab-trigger .title-icon svg{
+    fill:rgba({{ module.style.tab_style.text_style.color_field.color|convert_rgb }},{{ module.style.tab_style.text_style.color_field.opacity * 0.01 }});
+  }
+  {% endif %}
+
   .{{ name }}.tabber-wrapper-module:not(.tab_align_vertical) .tab-lists .tab-item{
     margin-left:-{{ module.style.tab_style.border.width }}px;
     margin-right:-{{ module.style.tab_style.border.width }}px;
@@ -153,12 +159,8 @@
     {% endif %}
   }
 
-  .{{ name }}.tabber-wrapper-module .tab-lists .tab-trigger .title-icon svg{
-    fill:rgba({{ module.style.tab_style.icon_color.color|convert_rgb }},{{ module.style.tab_style.icon_color.opacity*0.01 }});
-  }
-
   .{{ name }}.tabber-wrapper-module.tab_align_vertical ul.tab-lists>li a.tab-trigger{
-    border-bottom-color:rgba({{ module.style.active_tab_style.border.color.color|convert_rgb }},{{ module.style.active_tab_style.border.color.opacity100 }});\
+    border-bottom-color:rgba({{ module.style.active_tab_style.border.color.color|convert_rgb }},{{ module.style.active_tab_style.border.color.opacity100 }});
   }
 
   .{{name}}.tabber-wrapper-module ul.tab-lists li a.tab-trigger:hover:after,
@@ -167,7 +169,7 @@
   }
 
   .{{ name }}.tabber-wrapper-module .tab-lists .tab-item .tab-trigger:hover,
-  .{{ name }}.tabber-wrapper-module .tab-lists .tab-item.tab_active .tab-trigger{
+  .{{ name }}.tabber-wrapper-module .tab-lists .tab-item.tab_active .tab-trigger {
     {% if module.style.active_tab_style.override_active_text_style %}
     font-weight:{{ module.style.active_tab_style.text_style.font_weight }};
     font-size:{{ module.style.active_tab_style.text_style.font_size }}px;
@@ -180,6 +182,13 @@
     border-color:rgba({{ module.style.active_tab_style.border.color.color|convert_rgb }},{{ module.style.active_tab_style.border.color.opacity*0.01 }});
   }
 
+  {% if module.style.active_tab_style.override_active_text_style %}
+  .{{ name }}.tabber-wrapper-module .tab-lists .tab-item .tab-trigger:hover .title-icon svg,
+  .{{ name }}.tabber-wrapper-module .tab-lists .tab-item.tab_active .tab-trigger .title-icon svg{
+    fill:rgba({{ module.style.active_tab_style.text_style.color_field.color|convert_rgb }},{{ module.style.active_tab_style.text_style.color_field.opacity*0.01 }});
+  }
+  {% endif %}
+  
   .{{ name }}.tabber-wrapper-module.tab_align_vertical ul.tab-lists>li.tab_active a.tab-trigger{
     border-bottom-color:rgba({{ module.style.active_tab_style.border.color.color|convert_rgb }},{{ module.style.active_tab_style.border.color.opacity*0.01 }});
   }
@@ -193,10 +202,7 @@
     background-color:rgba({{ module.style.active_tab_style.background.content_background_color.color|convert_rgb }},{{ module.style.active_tab_style.background.content_background_color.opacity*0.01 }});
   }
 
-  .{{ name }}.tabber-wrapper-module .tab-lists .tab-item .tab-trigger:hover .title-icon svg,
-  .{{ name }}.tabber-wrapper-module .tab-lists .tab-item.tab_active .tab-trigger .title-icon svg{
-    fill:rgba({{ module.style.active_tab_style.icon_color.color|convert_rgb }},{{ module.style.active_tab_style.icon_color.opacity * 0.01 }});
-  }
+
 
   .{{ name }}.tabber-wrapper-module ul.tab-lists a.tab-trigger .title-icon{
     width:{{ module.style.active_tab_style.text_style.font_size }}px;

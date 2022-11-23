@@ -97,18 +97,10 @@
     <!--      -->
 
     {% if module.enable_pagination %}
-
-    {% set nav = hubdb_table_rows(module.select_table, paginationQuery) %}
-    {% set total_pages = nav|length|divide(batch_num)%}
-    {% set more_pages = nav|length % batch_num %}
-
-    {% if module.select_pagination == "prev_next" %}
-    {% if more_pages == 0 %}
-    {% set total_pages = total_pages %}
-    {% else %}
-    {% set total_pages = total_pages + 1 %}
-    {% endif %}
-    {% endif %}
+    
+    {% set nav = hubdb_table_rows(module.select_table, paginationQuery) %}    
+    {% set total_pages = (nav|length/batch_num)|round(0, 'ceil') %}
+    {% set more_pages = total_pages - page_num %}
 
     <nav class="hbdb_dsp_table_pagination  {% if module.select_pagination == "infinite" %}infinite{% endif %}">
       <div class="nav-links" data-total="{{total_pages}}" data-page="{{page_num}}" data-more="{{more_pages}}">

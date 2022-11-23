@@ -1,4 +1,4 @@
-.cards_gallery_module .card-outer img {
+.cards_gallery_module .card-outer .img {
   max-width: 100%;
   height: auto;
   vertical-align: middle;
@@ -95,13 +95,14 @@
   position: relative;
 }
 
-.cards_gallery_module .icon-wrap img {
+.cards_gallery_module .icon-wrap .img {
   position: absolute;
   height: 100%;
   width: 100%;
   top: 0;
   left: 0;
-  /*   object-fit: cover; */
+  background-size: cover;
+  background-position: center;
 }
 
 .cards_gallery_module .icon-wrap {
@@ -288,7 +289,28 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
+  align-content: center;
+}
+
+.cards_gallery_module .item.flipeffect .card-outer.flipcont h2.title {
+  width: 100%;
+}
+
+.cards_gallery_module .item.flipeffect .card-outer.flipcont h4.subtitle {
+  width: 100%;
+}
+
+.cards_gallery_module .item.flipeffect .card-outer.flipcont p.description {
+  width: 100%;
+}
+
+.cards_gallery_module .item.flipeffect .card-outer.flipcont .social-links {
+  width: 100%;
+  justify-content: center;
+}
+
+.cards_gallery_module .item.flipeffect .card-outer.flipcont .butn-wrapper {
+  width: 100%;
 }
 
 .cards_gallery_module .item.flipeffect .card-outer.flipcont {

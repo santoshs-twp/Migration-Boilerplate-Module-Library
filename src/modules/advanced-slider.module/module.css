@@ -1,5 +1,6 @@
 .advanced-slider img {
   max-width: 100%;
+  margin: 0 auto;
   height: auto;
   vertical-align: middle;
 }
@@ -134,6 +135,28 @@
 
 .advanced-slider .thumbnail-slider-inner{
   cursor:pointer; 
+}
+
+.slick-lightbox-slick-item-inner .slick-lightbox-slick-caption {
+  width: 100%;
+  max-width:1024px;
+  margin: 0 auto;
+  display: block;
+  padding: 15px;
+}
+
+.slick-lightbox-slick-item-inner .slick-lightbox-slick-caption *,
+.slick-lightbox-slick-item-inner .slick-lightbox-slick-caption{
+  color:#fff;
+}
+
+.slick-lightbox-slick-item-inner {
+  display: inline-block;
+  overflow-y: auto;
+}
+
+.advanced-slider .slider-item-inner.below .caption {
+  margin-top: 15px;
 }
 
 @media (min-width:768px) {

@@ -1,7 +1,7 @@
 
 {% set imgPath =  get_asset_url('../../images/menu_img.png') %}
 
-<div class="multipurose_nav {{name}}">
+<div class="multipurose_nav {{name}} stylechanges {{ module.advanced_customization.css_class_selector }}" {% if module.advanced_customization.css_id_selector %} id="{{ module.advanced_customization.css_id_selector }}"{% endif %}>
   {# Default menu item classes #}
 
   {% macro defaultItemClasses() %}
@@ -56,115 +56,115 @@
   {% endmacro %}
 
   {# Navigation menu item macro #}
-
-
-
-
   {% macro link(node) %}
 
-
-
-
   <li {{ childClasses() if node.children else defaultItemClasses() }}>
-    {% if module.enable_mega_menu == "false" %}
-
-    <a href="{{ node.url if node.url else 'javascript:;' }}" class="menu-link" data-id="1" {{ activeBranch() if node.activeBranch }} {{ activeNode() if node.activeNode }} {{ linkTarget() if node.linkTarget }}>
+    {% if module.enable_mega_menu == "false"  %}
+    <a href="{{ node.url if node.url else 'javascript:;' }}" class="menu-link  menu__{{level}}" data-id="1" {{ activeBranch() if node.activeBranch }} {{ activeNode() if node.activeNode }} {{ linkTarget() if node.linkTarget }}>
       <span>{{ node.label }}</span><div class="arrow"></div>
     </a>
     {% endif %}
 
+
+    <!--   mega menu   -->
+
+    {% set nodeLabel = node.label|lower|replace(' ','')|replace('-','') %}
+
     {% if module.enable_mega_menu %}
-    {% if level == 2 or level == 3 or level == 4 %}
-    <div class="megaMenu_link imgPos_{{ module.image_position }} level__{{level}}">
+    {% if level > 1 %}  
+    {% if module.mega_menu_content and module.include_mega_menu_content %}
+    {% for item in module.mega_menu_content %}
+    {% set menulabel = item.menu_label|lower|replace(' ','')|replace('-','') %}
+    {% if  menulabel == nodeLabel  %}
+    <div class="megaMenu_link imgPos_{{ module.module_settings.image_position }} withoutChecklevel level__{{level}}">
 
-
-      {% if module.image_position == "left" or module.image_position == "right" %}
+      {% if module.module_settings.image_position == "left" or module.module_settings.image_position == "right" %}
       {% else %}
-      <a href="{{ node.url if node.url else 'javascript:;' }}" class="menu-link" data-id="2" {{ activeBranch() if node.activeBranch }} {{ activeNode() if node.activeNode }} {{ linkTarget() if node.linkTarget }}>
+      <a href="{{ node.url if node.url else 'javascript:;' }}" class="menu-link  menu__{{level}}" data-id="2" {{ activeBranch() if node.activeBranch }} {{ activeNode() if node.activeNode }} {{ linkTarget() if node.linkTarget }}>
         <span class="menu_link_text">{{ node.label }}</span>
       </a>
       {% endif %}
 
 
+
       <div class="img_box">
-        <a href="{{ node.url if node.url else 'javascript:;' }}" class="menu-link" data-id="3" {{ activeBranch() if node.activeBranch }} {{ activeNode() if node.activeNode }} {{ linkTarget() if node.linkTarget }}>
-          <img src="{{ imgPath }}" alt="Menu Image"  {{ sizeAttrs }}>
+        <a href="{{ node.url if node.url else 'javascript:;' }}" class="menu-link  menu__{{level}}" data-id="3" {{ activeBranch() if node.activeBranch }} {{ activeNode() if node.activeNode }} {{ linkTarget() if node.linkTarget }}>
+          <div class="img_card" {% if module.module_settings.change_image_width %}style=" max-width: {{ module.module_settings.image_width }}px;"{% endif %}>
+            <img src="{{ item.image.src }}" alt="Menu Image"  {{ sizeAttrs }}>
+          </div>
         </a>
       </div>
 
-      {% if module.image_position == "left" or module.image_position == "right" %}
+      {% if module.module_settings.image_position == "left" or module.module_settings.image_position == "right" %}
       <div class="desc_link_col">
-        <a href="{{ node.url if node.url else 'javascript:;' }}" class="menu-link" data-id="4" {{ activeBranch() if node.activeBranch }} {{ activeNode() if node.activeNode }} {{ linkTarget() if node.linkTarget }}>
+        <a href="{{ node.url if node.url else 'javascript:;' }}" class="menu-link  menu__{{level}}" data-id="4" {{ activeBranch() if node.activeBranch }} {{ activeNode() if node.activeNode }} {{ linkTarget() if node.linkTarget }}>
           <span class="menu_link_text">{{ node.label }}</span>
         </a>
 
+        {% if item.content  %}
         <div class="description">
-          {% if module.description  %}
-          {{ module.description }}
-          {% else %}
-          <p>
-            it is a long established fact that a reader will be distracted by the readable content.
-          </p>
-          {% endif %}
+          {{ item.content }}
         </div>
+        {% endif %}
 
-
+        {% if item.button_text  %}
         <div class="menu_btn_wrap">
-          {% if module.button_group.select_button_type == "std" %}
-          {% set href = module.button_group.link.url.href %}
-          {% if module.button_group.link.url.type is equalto "EMAIL_ADDRESS" %}
+          {% if item.select_button_type == "standard" or item.select_button_type == "simple_link" %}
+          {% set href = item.link.url.href %}
+          {% if item.link.url.type is equalto "EMAIL_ADDRESS" %}
           {% set href = "mailto:" + href %}
           {% endif %}
-          <a href="{{ href }}" class="hs-button button-primary"
-             {% if module.button_group.link.open_in_new_tab %}target="_blank"{% endif %}
-             {% if module.button_group.link.rel %}rel="{{ module.button_group.link.rel }}"{% endif %}
-             > {{ module.button_group.button_text }}
+          <a href="{{ href }}" {% if item.select_button_type == "simple_link" %}class="noLink"{% else %}class="hs-button button-primary"{% endif%}
+             {% if item.link.open_in_new_tab %}target="_blank"{% endif %}
+             {% if item.link.rel %}rel="{{ item.link.rel }}"{% endif %}
+             > {{ item.button_text }}
           </a>
           {% else %}
-          {% cta guid="{{ module.button_group.cta_field }}" %}
+          {% cta guid="{{ item.cta_field }}" %}
           {% endif %}
         </div>
+        {% endif %}
       </div>
       {% else %}
       {% endif %}
 
-      {% if module.image_position == "left" or module.image_position == "right" %}
+      {% if module.module_settings.image_position == "left" or module.module_settings.image_position == "right" %}
       {% else %}
-
+      {% if item.content  %}
       <div class="description">
-        {% if module.description  %}
-        {{ module.description }}
-        {% else %}
-        <p>
-          it is a long established fact that a reader will be distracted by the readable content.
-        </p>
-        {% endif %}
+        {{ item.content }}
       </div>
-
+      {% endif %}
+      {% if item.button_text  %}
       <div class="menu_btn_wrap">
-        {% if module.button_group.select_button_type == "std" %}
-        {% set href = module.button_group.link.url.href %}
-        {% if module.button_group.link.url.type is equalto "EMAIL_ADDRESS" %}
+        {% if item.select_button_type == "standard" or item.select_button_type == "simple_link" %}
+        {% set href = item.link.url.href %}
+        {% if item.link.url.type is equalto "EMAIL_ADDRESS" %}
         {% set href = "mailto:" + href %}
         {% endif %}
-        <a href="{{ href }}" class="hs-button button-primary"
-           {% if module.button_group.link.open_in_new_tab %}target="_blank"{% endif %}
-           {% if module.button_group.link.rel %}rel="{{ module.button_group.link.rel }}"{% endif %}
-           > {{ module.button_group.button_text }}
+        <a href="{{ href }}" {% if item.select_button_type == "simple_link" %}class="noLink"{% else %}class="hs-button button-primary"{% endif%}
+           {% if item.link.open_in_new_tab %}target="_blank"{% endif %}
+           {% if item.link.rel %}rel="{{ item.link.rel }}"{% endif %}
+           > {{ item.button_text }}
         </a>
         {% else %}
-        {% cta guid="{{ module.button_group.cta_field }}" %}
+        {% cta guid="{{ item.cta_field }}" %}
         {% endif %}
       </div>
-
+      {% endif %}
       {% endif %}
 
-    </div>
 
-    {% else %}
-    <a href="{{ node.url if node.url else 'javascript:;' }}" class="menu-link" data-id="5" {{ activeBranch() if node.activeBranch }} {{ activeNode() if node.activeNode }} {{ linkTarget() if node.linkTarget }}><span>{{ node.label }}</span><div class="arrow"></div></a>
+    </div>
+    {% endif %}
+    {% endfor %}
     {% endif %}
 
+    <a href="{{ node.url if node.url else 'javascript:;' }}" class="menu-link  menu__{{level}}" data-id="1" {{ activeBranch() if node.activeBranch }} {{ activeNode() if node.activeNode }} {{ linkTarget() if node.linkTarget }}><span>{{ node.label }}</span><div class="arrow"></div></a>
+    {% else %}
+    <!--   mega menu level 1  -->
+    <a href="{{ node.url if node.url else 'javascript:;' }}" class="menu-link  menu__{{level}}" data-id="5" {{ activeBranch() if node.activeBranch }} {{ activeNode() if node.activeNode }} {{ linkTarget() if node.linkTarget }}><span>{{ node.label }}</span><div class="arrow"></div></a>
+    {% endif %}
     <!--      -->
     {% endif %}
 
@@ -184,14 +184,21 @@
     {% for node in menuTree.children %}
     {{ link(node) }}
 
-  {% set menuIndex = loop.index  %}
+    {% set menuIndex = loop.index  %}
 
     {% if menuIndex == module.logo_group.logo_position && level == 1 %} 
     {% if module.logo_group.logo.src and module.include_logo %}
+    {% set href = module.logo_group.logo_link.url.href %}
+    {% if module.logo_group.logo_link.url.type is equalto "EMAIL_ADDRESS" %}
+    {% set href = "mailto:" + href %}
+    {% endif %}
     <li class="custom-logo" >
-      <a href="/">
-        <img src="{{ module.logo_group.logo.src }}" alt="logo" width="{{ module.logo_group.logo_width }}">
-      </a>
+      {% if module.logo_group.include_link_on_logo %}<a href="{{ href }}"
+                                                        {% if module.logo_group.logo_link.open_in_new_tab %}target="_blank"{% endif %}
+                                                        {% if module.logo_group.logo_link.rel %}rel="{{ module.logo_group.logo_link.rel }}"{% endif %}
+                                                        >{% endif %}
+      <img src="{{ module.logo_group.logo.src }}" alt="logo" width="{{ module.logo_group.logo_width }}">
+      {% if module.logo_group.include_link_on_logo %}</a>{% endif %}
     </li>
     {% endif %}
     {% endif %}
@@ -258,94 +265,126 @@
 
 {% require_css%}
 <style>
-  .{{name}} .custom-logo{
+  .{{name}}.multipurose_nav.stylechanges .custom-logo{
     width:{{ module.logo_group.logo_width }}px;
   }
 
   {% if module.logo_group.change_mobile_logo_width %}
   @media(max-width:767px){
-    .{{name}} .custom-logo{
+    .{{name}}.multipurose_nav.stylechanges .custom-logo{
       width:{{ module.logo_group.mobile_logo_width }}px;
     }
   }
   {% endif %}
 
-  .{{name}} .mobile-trigger{
+  .{{name}}.multipurose_nav.stylechanges .mobile-trigger{
     color: rgba({{ module.style.mobile_style.toggler_color.color|convert_rgb  }},{{ module.style.mobile_style.toggler_color.opacity/100 }});
     border-color: rgba({{ module.style.mobile_style.toggler_color.color|convert_rgb  }},{{ module.style.mobile_style.toggler_color.opacity/100 }});
   }
 
-
-  /*   .{{name}}:not(.mobile-open) .mobile-trigger i,
-  .{{name}}:not(.mobile-open) .mobile-trigger i:before,
-  .{{name}}:not(.mobile-open) .mobile-trigger i:after, */
-  .{{name}}:not(.mobile-open) .mobile-trigger:not(:hover) i,
-  .{{name}}:not(.mobile-open) .mobile-trigger:not(:hover) i:before,
-  .{{name}}:not(.mobile-open) .mobile-trigger:not(:hover) i:after,
-  .{{name}} .mobile-trigger:hover,
-  .{{name}} .mobile-trigger:not(:hover) i,
-  .{{name}} .mobile-trigger:not(:hover) i:before,
-  .{{name}} .mobile-trigger:not(:hover) i:after{
+  .{{name}}.multipurose_nav.stylechanges:not(.mobile-open) .mobile-trigger:not(:hover) i,
+  .{{name}}.multipurose_nav.stylechanges:not(.mobile-open) .mobile-trigger:not(:hover) i:before,
+  .{{name}}.multipurose_nav.stylechanges:not(.mobile-open) .mobile-trigger:not(:hover) i:after,
+  .{{name}}.multipurose_nav.stylechanges .mobile-trigger:hover,
+  .{{name}}.multipurose_nav.stylechanges .mobile-trigger:not(:hover) i,
+  .{{name}}.multipurose_nav.stylechanges .mobile-trigger:not(:hover) i:before,
+  .{{name}}.multipurose_nav.stylechanges .mobile-trigger:not(:hover) i:after{
     background-color: rgba({{ module.style.mobile_style.toggler_color.color|convert_rgb  }},{{ module.style.mobile_style.toggler_color.opacity/100 }});
   }
 
-  {% if module.style.background_options.change_background_style %}
-  .{{name}} nav.navigation-primary.cmNav.megaMenuOn ul.submenu.level-1 > li ul {
-    background-color: rgba({{ module.style.background_options.background_color.color|convert_rgb  }},{{ module.style.background_options.background_color.opacity/100 }});    
+  {% if module.style.background_options.change_child_menu_background_color %}
+  .{{name}}.multipurose_nav.stylechanges nav.navigation-primary.cmNav.megaMenuOn ul.submenu.level-1 > li ul {
+    background-color: rgba({{ module.style.background_options.child_menu_background_color.color|convert_rgb  }},{{ module.style.background_options.child_menu_background_color.opacity/100 }});    
   }
-
   {% endif %}
+
+  {% if module.style.background_options.change_grandchild_menu_background_color %}
+  .{{name}}.multipurose_nav.stylechanges nav.navigation-primary.cmNav.megaMenuOn ul.submenu.level-2 > li ul li   {
+    background-color: rgba({{ module.style.background_options.grandchild_menu_background_color.color|convert_rgb  }},{{ module.style.background_options.grandchild_menu_background_color.opacity/100 }});    
+  }
+  {% endif %}
+
+
 
   {% if module.style.border_options.change_background_style %}
 
   @media(min-width:768px){
 
     {% if module.style.border_options.select_border_position == "outer" %}
-    .{{name}}  .navigation-primary.cmNav ul.submenu.level-1 > li > ul{
+    .{{name}}.multipurose_nav.stylechanges  .navigation-primary.cmNav ul.submenu.level-1 > li > ul{
       border: {{ module.style.border_options.border_width }}px solid;
       border-color: rgba({{ module.style.border_options.border_color.color|convert_rgb  }},{{ module.style.border_options.border_color.opacity/100 }});    
     }
-    .{{name}} nav.navigation-primary.cmNav.megaMenuOn ul.submenu.level-2 > li >.megaMenu_link:after{
+    .{{name}}.multipurose_nav.stylechanges nav.navigation-primary.cmNav.megaMenuOn ul.submenu.level-2 > li >.megaMenu_link:after{
       content:none;  
     }
 
     {% endif %}
-    {% if module.style.border_options.select_border_position == "below" %}
-    .{{name}}  .navigation-primary.cmNav ul.submenu.level-1 > li > ul{
-      border: none;
-    }
 
-    .{{name}} nav.navigation-primary.cmNav.megaMenuOn ul.submenu.level-2 > li >.megaMenu_link:after{
-      content: '';
-      height: {{ module.style.border_options.border_width }}px;
-      background-color: rgba({{ module.style.border_options.border_color.color|convert_rgb  }},{{ module.style.border_options.border_color.opacity/100 }});    
-    }
-    {% endif %}
 
     {% if module.style.border_options.select_border_position == "in_between" %}
-    .{{name}} nav.navigation-primary.cmNav.megaMenuOn ul.submenu.level-2 > li >.megaMenu_link:after{
+    .{{name}}.multipurose_nav.stylechanges nav.navigation-primary.cmNav.megaMenuOn ul.submenu.level-2 > li >.megaMenu_link:after{
       content:none;  
     }
-    .{{name}}  .navigation-primary.cmNav ul.submenu.level-1 > li > ul{
+    .{{name}}.multipurose_nav.stylechanges  .navigation-primary.cmNav ul.submenu.level-1 > li > ul{
       border: none;
     }
 
-    .{{name}} nav.navigation-primary.cmNav.megaMenuOn ul.submenu.level-2 > li {
+    .{{name}}.multipurose_nav.stylechanges nav.navigation-primary.cmNav.megaMenuOn ul.submenu.level-2 > li {
       border: {{ module.style.border_options.border_width }}px solid;
       border-color: rgba({{ module.style.border_options.border_color.color|convert_rgb  }},{{ module.style.border_options.border_color.opacity/100 }});    
     }
     {% endif %}
+
+    .{{name}}.multipurose_nav.stylechanges .navigation-primary.cmNav ul.submenu.level-1 ul > li{
+      border-width: {{ module.style.border_options.border_width }}px;
+    }
+
   }
 
+  @media(min-width:768px){
+    .{{name}}.multipurose_nav.stylechanges nav.navigation-primary.cmNav.megaMenuOn ul.submenu.level-2 ul li:first-child {
+      border-top: 1px solid #000;
+      border-color: rgba({{ module.style.border_options.grandchild_menu_border_color.color|convert_rgb  }},{{ module.style.border_options.grandchild_menu_border_color.opacity/100 }});  
+      border-top-width: {{ module.style.border_options.grand_menu_border_width }}px;
+    }
+
+    .{{name}}.multipurose_nav.stylechanges nav.navigation-primary.cmNav.megaMenuOn ul.submenu.level-2 ul li {
+      border-width: 1px 0 0px 0;
+      border-bottom-width: {{ module.style.border_options.grand_menu_border_width }}px;
+      border-top-width: {{ module.style.border_options.grand_menu_border_width }}px;
+      border-color: rgba({{ module.style.border_options.grandchild_menu_border_color.color|convert_rgb  }},{{ module.style.border_options.grandchild_menu_border_color.opacity/100 }});  
+    }
+  }
+
+
+  @media(max-width:767px){
+    .{{name}}.multipurose_nav.stylechanges .navigation-primary.cmNav li.has-submenu.menu-item.child-open>a, nav.navigation-primary.cmNav ul>li{
+      border-color: rgba({{ module.style.border_options.grandchild_menu_border_color.color|convert_rgb  }},{{ module.style.border_options.grandchild_menu_border_color.opacity/100 }}) !important;  
+    }
+
+    .{{name}}.multipurose_nav.stylechanges nav.navigation-primary.cmNav{
+      border-width: {{ module.style.border_options.border_width }}px;    
+      border-color: rgba({{ module.style.border_options.border_color.color|convert_rgb  }},{{ module.style.border_options.border_color.opacity/100 }}); 
+    }
+
+    .{{name}}.multipurose_nav.stylechanges nav.navigation-primary.cmNav ul > li,
+    .{{name}}.multipurose_nav.stylechanges .navigation-primary.cmNav li.has-submenu.menu-item.child-open > a{
+      border-bottom-width: {{ module.style.border_options.border_width }}px;    
+    }
+
+
+  }
   {% endif %}
 
   {% if module.module_settings.change_image_width %}
-  .{{name}} nav.navigation-primary.cmNav img {
+  .{{name}}.multipurose_nav.stylechanges nav.navigation-primary.cmNav img {
     width: {{ module.module_settings.image_width }}px;
   }
   {% endif %}
 
 </style>
 {% end_require_css%}
+
 
 

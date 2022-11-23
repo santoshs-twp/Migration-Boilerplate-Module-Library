@@ -14,8 +14,7 @@
 
             {% if item.image_field.src %}
             <div class="normal-img">
-              {% set loadingAttr = item.image_field.loading != 'disabled' ? 'loading="{{ item.image_field.loading }}"' : '' %}
-              <img src="{{ item.image_field.src }}" alt="{{ item.image_field.alt }}" {{ loadingAttr }} />
+              <div class="img" style="background-image: url({{ item.image_field.src }});"></div>
             </div>
             {% endif %}
 
@@ -29,8 +28,8 @@
             {% if item.hover_effect == "imghovereffect" %}
             <div class="hover-img">
               {% if item.hover_image.src %}
-              {% set loadingAttr = item.hover_image.loading != 'disabled' ? 'loading="{{ item.hover_image.loading }}"' : '' %}
-              <img src="{{ item.hover_image.src }}" alt="{{ item.hover_image.alt }}" {{ loadingAttr }} />
+              <div class="img" style="background-image: url({{ item.hover_image.src }});">                
+              </div>
               {% endif %}
             </div>            
             {% endif %}

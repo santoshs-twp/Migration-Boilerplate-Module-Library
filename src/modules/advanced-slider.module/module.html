@@ -28,7 +28,7 @@
            >
           {% endif %}
           {% set loadingAttr = item.image_field.loading != 'disabled' ? 'loading="{{ item.image_field.loading }}"' : '' %}
-          <img src="{{ item.image_field.src }}" alt="{{ item.image_field.alt }}" {{ loadingAttr }}>
+          <img src="{{ item.image_field.src }}" alt="{{ item.image_field.alt }}" {{ loadingAttr }} {% if module.slider_type == "lightbox" %} data-text="{{ item.caption|escape }}" {% endif %}>
           {% if item.include_image_link %}
         </a>
         {% endif %}
@@ -41,8 +41,10 @@
           {% if item.show_caption or item.include_button %}
           <div class="caption">
             <div class="caption-inner">
-              {% if item.show_caption %}
-              {{ item.caption }}
+              {% if item.show_caption and module.caption_position %}
+              <div class="slider-main-caption">
+                {{ item.caption }}  
+              </div>
               {% endif %}
               {% if item.include_button %}
               <div class="buttons">
@@ -204,6 +206,14 @@
   .{{name}}.advanced-slider .carousel-bg-img{
     min-height:{{ module.carousel_slider_settings.slider_height }}{{ module.carousel_slider_settings.select_height_unit }};
   }
+  
+  {% if module.style.override_default_font_color %}
+    .{{name}}.advanced-slider .slider-main-caption *,
+  .{{name}}.advanced-slider .slider-main-caption {
+      color:rgba({{ module.style.caption_text_color.color|convert_rgb }},{{ module.style.caption_text_color.opacity*0.01 }});
+    }
+  {% endif %}
+
 
 </style>
 
@@ -243,8 +253,15 @@
     {% else %}
     fade:false,
     {% endif %}
-    slidesToShow: {{ module.slides_to_show_in_desktop }},
-    slidesToScroll: {{ module.slides_to_scroll_in_desktop }},
+    
+    {% if module.slider_type == "carousel" %}
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    {% else %}
+      slidesToShow: {{ module.slides_to_show_in_desktop }},
+      slidesToScroll: {{ module.slides_to_scroll_in_desktop }},
+    {% endif %}
+    
     {% if module.slider_type == "thumbnail" %}
     asNavFor: '#thumbnail{{name}}',
     {% endif %}
@@ -289,7 +306,8 @@
   {% if module.slider_type == "lightbox" %}
   $('#{{name}}Slider').slickLightbox({
     src: 'src',
-    itemSelector: '.popup-img img'
+    itemSelector: '.popup-img img',
+    caption: 'text'
     });
   {% endif %}
 </script>

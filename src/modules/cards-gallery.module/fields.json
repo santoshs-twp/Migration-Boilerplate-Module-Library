@@ -1128,7 +1128,7 @@
     "id" : "54821ba4-c2a9-ab32-6462-e477320aa8a9",
     "name" : "font_options",
     "display_width" : null,
-    "label" : "font options",
+    "label" : "Font options",
     "required" : false,
     "locked" : false,
     "children" : [ {

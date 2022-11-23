@@ -35,8 +35,8 @@
 .tabber-wrapper-module ul.tab-lists a.tab-trigger:hover,
 .tabber-wrapper-module ul.tab-lists .tab_active a.tab-trigger{
   background-color: #fff;
-  border: 1px solid #1abc9c;
-  color: #1abc9c;
+  border: 1px solid #999;
+  color: #999;
   z-index: 1;
 }
 
@@ -60,8 +60,9 @@
   fill:#fff;
 }
 
+.tabber-wrapper-module ul.tab-lists a.tab-trigger:hover .title-icon svg,
 .tabber-wrapper-module ul.tab-lists .tab_active a.tab-trigger .title-icon svg{
-  fill:#1abc9c;
+  fill:#999;
 }
 
 

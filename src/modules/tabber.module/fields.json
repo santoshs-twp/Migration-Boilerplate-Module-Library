@@ -644,7 +644,7 @@
         "locked" : false,
         "type" : "color",
         "default" : {
-          "color" : "#1abc9c",
+          "color" : "#999999",
           "opacity" : 100
         }
       } ],
@@ -653,7 +653,7 @@
       "type" : "group",
       "default" : {
         "background_color" : {
-          "color" : "#1abc9c",
+          "color" : "#999999",
           "opacity" : 100
         }
       }
@@ -727,27 +727,6 @@
       "suffix" : "px",
       "type" : "number",
       "default" : 0
-    }, {
-      "id" : "7b356ec2-ab27-37c2-0473-393ec8c6ac4d",
-      "name" : "icon_color",
-      "display_width" : null,
-      "label" : "Icon color",
-      "required" : false,
-      "locked" : false,
-      "visibility" : {
-        "controlling_field" : "786f116e-8a51-05bf-7889-a3b3dad0f1bc",
-        "controlling_field_path" : null,
-        "controlling_value_regex" : "icon",
-        "property" : null,
-        "operator" : "EQUAL",
-        "access" : null,
-        "hidden_subfields" : null
-      },
-      "type" : "color",
-      "default" : {
-        "color" : "#fff",
-        "opacity" : 100
-      }
     } ],
     "tab" : "STYLE",
     "expanded" : false,
@@ -768,7 +747,7 @@
       },
       "background" : {
         "background_color" : {
-          "color" : "#1abc9c",
+          "color" : "#999999",
           "opacity" : 100
         }
       },
@@ -780,11 +759,7 @@
           "opacity" : 100
         }
       },
-      "radius" : 0,
-      "icon_color" : {
-        "color" : "#fff",
-        "opacity" : 100
-      }
+      "radius" : 0
     }
   }, {
     "id" : "fdaf83f9-3fbb-9638-f3b8-49be2ccdd72a",
@@ -1024,7 +999,7 @@
         "locked" : false,
         "type" : "color",
         "default" : {
-          "color" : "#1abc9c",
+          "color" : "#999999",
           "opacity" : 100
         }
       }, {
@@ -1045,31 +1020,10 @@
         "width" : 1,
         "type" : "solid",
         "color" : {
-          "color" : "#1abc9c",
+          "color" : "#999999",
           "opacity" : 100
         },
         "remove_content_border" : false
-      }
-    }, {
-      "id" : "1f6253bf-3389-3c9e-1166-0b7d7b27356d",
-      "name" : "icon_color",
-      "display_width" : null,
-      "label" : "Icon color",
-      "required" : false,
-      "locked" : false,
-      "visibility" : {
-        "controlling_field" : "786f116e-8a51-05bf-7889-a3b3dad0f1bc",
-        "controlling_field_path" : null,
-        "controlling_value_regex" : "icon",
-        "property" : null,
-        "operator" : "EQUAL",
-        "access" : null,
-        "hidden_subfields" : null
-      },
-      "type" : "color",
-      "default" : {
-        "color" : "#1abc9c",
-        "opacity" : 100
       }
     } ],
     "tab" : "STYLE",
@@ -1103,14 +1057,10 @@
         "width" : 1,
         "type" : "solid",
         "color" : {
-          "color" : "#1abc9c",
+          "color" : "#999999",
           "opacity" : 100
         },
         "remove_content_border" : false
-      },
-      "icon_color" : {
-        "color" : "#1abc9c",
-        "opacity" : 100
       }
     }
   } ],
@@ -1134,7 +1084,7 @@
       },
       "background" : {
         "background_color" : {
-          "color" : "#1abc9c",
+          "color" : "#999999",
           "opacity" : 100
         }
       },
@@ -1146,11 +1096,7 @@
           "opacity" : 100
         }
       },
-      "radius" : 0,
-      "icon_color" : {
-        "color" : "#fff",
-        "opacity" : 100
-      }
+      "radius" : 0
     },
     "active_tab_style" : {
       "override_active_text_style" : false,
@@ -1180,14 +1126,10 @@
         "width" : 1,
         "type" : "solid",
         "color" : {
-          "color" : "#1abc9c",
+          "color" : "#999999",
           "opacity" : 100
         },
         "remove_content_border" : false
-      },
-      "icon_color" : {
-        "color" : "#1abc9c",
-        "opacity" : 100
       }
     }
   }
