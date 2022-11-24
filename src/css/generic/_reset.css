@@ -1,8 +1,0 @@
-*, *:before, *:after {
-  box-sizing: border-box;
-}
-
-.slick-lightbox-close:hover {
-    background: transparent;
-    border: transparent;
-}
