@@ -1,4 +1,4 @@
-# Migration boilerplate module library
+# Migration boilerplate modules library
 
 1: Multipurpose Navigation<br>
 2: Advanced Slider<br>
