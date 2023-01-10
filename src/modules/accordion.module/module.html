@@ -21,7 +21,7 @@
       </div>
 
     </div>
-    <div class="acc-content">
+    <div class="acc-content"{% if item.open_by_default %} style="display: block;"{% endif %}>
       {% if item.content %}
       <div class="desc">
         {{ item.content }}
