@@ -152,6 +152,9 @@
 
 .slick-lightbox-slick-item-inner {
   display: inline-block;
+}
+
+.slick-lightbox-slick .slick-lightbox-slick-item {
   overflow-y: auto;
 }
 
